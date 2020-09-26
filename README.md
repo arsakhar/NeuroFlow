@@ -30,49 +30,64 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 
 There are 3 primary tabs on the client GUI: Networking, View, and Logging.
 
-#### Networking
+#### Load Patient Data
 
-![Networking Tab](https://raw.githubusercontent.com/arsakhar/FitViz/master/readme/Networking.PNG?token=AJKJ6DYYPYFCCU5FLMTS7GC7LXHQI)
+![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.PNG?token=AJKJ6DYYPYFCCU5FLMTS7GC7LXHQI)
 
-The _Networking_ tab is used to connect to ANT+ devices. 
+The _File Browser_ tab is used to load a DICOMDIR. 
 
-* Select _Run_ under _Network Controls_ to scan for ANT+ devices. ANT+ devices identified during the scan period (5 seconds) are displayed under _Broadcasting Devices_. If ANT+ devices are identified, the network driver continues to listen indefinitely for incoming ANT+ messages.
-* If a device is unknown, it will be named "Unknown Device <device number>". You can double click on the device entry under _Broadcasting Devices_ to rename the device. The name change will not take effect until the ANT+ session is restarted.
-* Once an ANT+ session is started, it will continue to run indefinitely. An ANT+ session can be closed by selecting _Stop_ under Network Controls.
-* _Reset_ can be used to reset measurement values that accumulate over time. For example, some ANT+ messages associated with a Bicycle Trainer included distance traveled and elapsed time, which are accumulated measurements. _Reset_ will set those measurement values to 0.
-* _Network Statistics_ displays basic ANT+ network statistics including: # messages received, # ANT+ devices broadcasting, # device profiles received, and message frequency.
+* Select the File Browser tab. Select the DICOMDIR file associated with the patient to be analyzed. Double click the highlighted selection to load the patient.
 
-#### View
+#### Segment ROI
 
-![View Tab](https://raw.githubusercontent.com/arsakhar/FitViz/master/readme/View.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
 
-The _View_ tab is used to visualize measurement data from ANT+ devices. There are 4 viewing panels allowing for up to 4 measurements to be viewed concurrently in real-time.
+* Select the Series tab.
+* Select a pen from the color palette of pens in the toolbar.
 
-* Select a device from the _Devices_ dropdown box.
-* Select a profile from the _Profiles_ box.
-* Select a data page from the _Data Pages_ box.
-* Select a page measurement from the _Page Measurements_ box.
+![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
 
-The measurement will be displayed via a gauge or LCD number depending on the type of measurement. Generally speaking, accumulated measurements will be displayed as an LCD number while measurements that fall within a range will be displayed via the gauge.
+* Click inside the left view panel and drag the left mouse draw a contour around the desired ROI.
 
-#### Logging
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
 
-![Logging Tab](https://raw.githubusercontent.com/arsakhar/FitViz/master/readme/CSV.PNG?token=AJKJ6D6EH7ITDXT4DTPURUC7LXHNO)
+* To make fine adjustments to the segmentation, select the Mask tab.
+* Select a stamp from the slider in the toolbar.
 
-The _Logging_ tab is used to log measurement data.
+![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
 
-There are 2 logging options: UDP and CSV. CSV logging is simply writing data to a user-specified CSV file. For UDP logging, data is written to the user-specified ip address and port. The intent behind UDP is to allow for real-time data transfer to another program or device. In both cases, data is written each time a message is received.
+* Select the Mask tab.
+* Click inside the right view panel over to add/remove a mask at a single square pixel or click and drag to modify multiple pixels.
 
-* First, begin by adding the measurements you would like to track.
-* For CSV logging, set the filename and select _Start_ to begin logging.
-* For UDP logging, set the _Port_ and _IP Address_ select _Start_ to begin logging.
-* UDP data is delivered as a byte array of the following format: [measurement 1 value; measurement 2 value; measurement 3 value; measurement 4 value; ...]
+#### View Plot
+
+![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+
+* Select the Plot tab.
+* Plots for each segmentation can be viewed here.
+
+#### View Analysis
+
+![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+
+* Select the Analysis tab.
+* A table of flow measurements for each segmentation can be viewed here.
+
+#### Save Analysis
+
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+
+* Enter an ROI name in the input box on the toolbar.
+* Select the save icon, specify a save directory, and select ok.
+* Plots, tables, and images are saved to the specified directory.
 
 - - - -
 
 ### About
 
-The idea behind this project was to provide a standalone PC application for neuroscientists to use.
+The idea behind this project was to provide an quick and easy tool for neuroscientists and clinicians to assess cerebral flow dynamics in the brain. To my knowledge, BioFlow is the only publicly available flow analysis software.<sup>1</sup>
+
+1. Balédent O, Henry‐Feugeas MC, Idy‐Peretti I. Cerebrospinal fluid dynamics and relation with blood flow: a magnetic resonance study with semiautomated cerebrospinal fluid segmentation. Invest Radiol. 2001;36:368–377.
 
 - - - -
 
@@ -97,3 +112,10 @@ The idea behind this project was to provide a standalone PC application for neur
 ### Acknowledgements
 
 NeuroFlow would not be possible without liberal imports of PyQt5, NumPy, Pandas, OpenCV, PyQtGraph, scikit-image, and Matplotlib. 
+
+- - - -
+
+### Disclaimer
+
+NeuroFlow has not been rigorously QC tested and we claim no responsibility for inacurrate results.
+
