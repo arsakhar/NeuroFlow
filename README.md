@@ -1,7 +1,7 @@
 # NeuroFlow
 ## Brain Imaging Tool for Analyzing Cerebral Flow Dynamics
 
-![NeuroFlow Banner](Logo.png?raw=true)
+![NeuroFlow Banner](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Logo.png?token=7f53f268eb815de37139cc1a9b8685a52d2cb81a)
 
 _Developed by Ashwin Sakhare_
 
