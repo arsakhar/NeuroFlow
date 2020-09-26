@@ -1,42 +1,28 @@
 # NeuroFlow
-## Cerebral Flow Dynamics - Brain Imaging Analysis Tool
+## Brain Imaging Tool - Analyzing Cerebral Flow Dynamics
 
-![FitViz Banner](https://raw.githubusercontent.com/arsakhar/FitViz/master/readme/Logo.png?token=AJKJ6DYTD7J6XWH3QMPJTBS7LXHRO)
+![NeuroFlow Banner](https://raw.githubusercontent.com/arsakhar/FitViz/master/readme/Logo.png?token=AJKJ6DYTD7J6XWH3QMPJTBS7LXHRO)
 
 _Developed by Ashwin Sakhare_
 
-NeuroFlow is a brain imaging tool designed for neuroscientists and clinicians to analyze cerebral flow dynamics from acquired MRI images. designed for neuroscientists and clinicians. It supports analysis of cerebral flow dynamics in the brain.
+NeuroFlow is an imaging tool that allows neuroscientists and clinicians to analyze cerebral flow dynamics in the brain. The continuous circulation of cerebrospinal fluid (CSF) and cerebral blood flow (CBF) is key to the health of our central nervous system. When CSF and CBF dynamics in the brain become dysregulated, pathophysiological
+states can occur. As such, cerebral flow dynamics may be an important biomarker for identifying meaningful alterations in neurological diseases.
 
-- - - -
-
-### About ANT+
-
-<a href="https://www.thisisant.com/" target="_blank">ANT+</a> is a wireless sensor network technology that allows you to moniter data broadcast from ANT+ capable devices. Fitness equipment, bike trainers, heart rate monitors, and blood pressure monitors are just a few of the many devices supported within the ANT+ ecosystem. Data broadcast from ANT+ devices is standardized based on the type of data being sent. ANT+ refers to a data type as a <a href="https://www.thisisant.com/developer/ant-plus/device-profiles" target="_blank">device profile</a>. An ANT+ device can broadcast data associated with multiple device profiles. For example, the Wahoo Kickr Snap broadcasts bicycle power and fitness equipment data.
-
-- - - -
-
-### Supported Devices
- 
-FitViz currently support the following device profiles:
-* Heart Rate
-* Bicycle Cadence
-* Bicycle Speed
-* Bicycle Speed & Cadence
-* Bicycle Power
-* Fitness Equipment
+Phase-contrast MRI (PC-MRI) is a validated, non-invasive MRI imaging technique, allowing rapid measurements of CSF and CBF flow in the brain. NeuroFlow provides a user-friendly interface for neuroscientists and clinicians to analyze PC-MRI images and extract measurements associated with cerebral flow dynamics. Moreover, NeuroFlow provides numerous tools to help user's quickly, accurately, and painlessly analyze flow data.
 
 - - - -
 
 ### Installation
 
 NeuroFlow was written in Python (v3.8.5). A distributable, NeuroFlow.exe, is included and can be executed as a standalone program. The distributable has only been tested on Windows 10 Pro (10.0.18363 Build 18363).
+
 The source code isn't currently available for public use. However, I hope to make it public within the next few months.
 
 - - - -
 
 ### User guide
 
-Refer to the user manual located in the manual directory. 
+Refer to the user manual located in the manual directory for a comprehensive guide on using NeuroFlow.
 
 - - - -
 
