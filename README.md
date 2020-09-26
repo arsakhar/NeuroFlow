@@ -28,8 +28,6 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 
 ### Quick Start
 
-There are 3 primary tabs on the client GUI: Networking, View, and Logging.
-
 #### Load Patient Data
 
 ![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.PNG?token=AJKJ6DYYPYFCCU5FLMTS7GC7LXHQI)
