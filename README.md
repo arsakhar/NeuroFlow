@@ -36,7 +36,7 @@ The _File Browser_ tab is used to load a DICOMDIR.
 
 #### Segment ROI
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.PNG)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.png)
 
 * Select the Series tab.
 * Select a pen from the color palette of pens in the toolbar.
@@ -45,33 +45,33 @@ The _File Browser_ tab is used to load a DICOMDIR.
 
 * Click inside the left view panel and drag the left mouse draw a contour around the desired ROI.
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.PNG)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.png)
 
 * To make fine adjustments to the segmentation, select the Mask tab.
 * Select a stamp from the slider in the toolbar.
 
-![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.PNG)
+![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.png)
 
 * Select the Mask tab.
 * Click inside the right view panel over to add/remove a mask at a single square pixel or click and drag to modify multiple pixels.
 
 #### View Plot
 
-![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.PNG)
+![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.png)
 
 * Select the Plot tab.
 * Plots for each segmentation can be viewed here.
 
 #### View Analysis
 
-![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.PNG)
+![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.png)
 
 * Select the Analysis tab.
 * A table of flow measurements for each segmentation can be viewed here.
 
 #### Save Analysis
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.PNG)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.png)
 
 * Enter an ROI name in the input box on the toolbar.
 * Select the save icon, specify a save directory, and select ok.
