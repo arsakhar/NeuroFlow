@@ -34,46 +34,46 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 
 #### Segment ROI
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.png)
-
 * Select the Series tab.
 * Select a pen from the color palette of pens in the toolbar.
 
-![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.png)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.png)
 
 * Click inside the left view panel and drag the left mouse draw a contour around the desired ROI.
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.png)
+![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.png)
 
 * To make fine adjustments to the segmentation, select the Mask tab.
 * Select a stamp from the slider in the toolbar.
 
-![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.png)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.png)
 
 * Select the Mask tab.
 * Click inside the right view panel over to add/remove a mask at a single square pixel or click and drag to modify multiple pixels.
 
-#### View Plot
+![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.png)
 
-![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.png)
+#### View Plot
 
 * Select the Plot tab.
 * Plots for each segmentation can be viewed here.
 
-#### View Analysis
+![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.png)
 
-![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.png)
+#### View Analysis
 
 * Select the Analysis tab.
 * A table of flow measurements for each segmentation can be viewed here.
 
-#### Save Analysis
+![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.png)
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.png)
+#### Save Analysis
 
 * Enter an ROI name in the input box on the toolbar.
 * Select the save icon, specify a save directory, and select ok.
 * Plots, tables, and images are saved to the specified directory.
+
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.png)
 
 - - - -
 
