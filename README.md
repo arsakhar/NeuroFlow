@@ -30,8 +30,6 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 
 ![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.png)
 
-The _File Browser_ tab is used to load a DICOMDIR. 
-
 * Select the File Browser tab. Select the DICOMDIR file associated with the patient to be analyzed. Double click the highlighted selection to load the patient.
 
 #### Segment ROI
@@ -41,7 +39,7 @@ The _File Browser_ tab is used to load a DICOMDIR.
 * Select the Series tab.
 * Select a pen from the color palette of pens in the toolbar.
 
-![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.PNG)
+![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.png)
 
 * Click inside the left view panel and drag the left mouse draw a contour around the desired ROI.
 
