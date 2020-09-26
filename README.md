@@ -28,7 +28,7 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 
 #### Load Patient Data
 
-![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.png?token=f900069f578d7d5e76f6dc183869fcc90d54b878)
+![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.png)
 
 The _File Browser_ tab is used to load a DICOMDIR. 
 
@@ -36,42 +36,42 @@ The _File Browser_ tab is used to load a DICOMDIR.
 
 #### Segment ROI
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.PNG)
 
 * Select the Series tab.
 * Select a pen from the color palette of pens in the toolbar.
 
-![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.PNG)
 
 * Click inside the left view panel and drag the left mouse draw a contour around the desired ROI.
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.PNG)
 
 * To make fine adjustments to the segmentation, select the Mask tab.
 * Select a stamp from the slider in the toolbar.
 
-![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.PNG)
 
 * Select the Mask tab.
 * Click inside the right view panel over to add/remove a mask at a single square pixel or click and drag to modify multiple pixels.
 
 #### View Plot
 
-![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.PNG)
 
 * Select the Plot tab.
 * Plots for each segmentation can be viewed here.
 
 #### View Analysis
 
-![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.PNG)
 
 * Select the Analysis tab.
 * A table of flow measurements for each segmentation can be viewed here.
 
 #### Save Analysis
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.PNG?token=AJKJ6D6PGS322O5LQQGOGUC7LXHO4)
+![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.PNG)
 
 * Enter an ROI name in the input box on the toolbar.
 * Select the save icon, specify a save directory, and select ok.
