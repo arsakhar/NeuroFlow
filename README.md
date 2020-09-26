@@ -30,7 +30,7 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 
 #### Load Patient Data
 
-![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.PNG?token=git: https://github.com/ on LAPTOP-RTJB1MEE at 23-May-2020 15:11)
+![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.PNG?token=2867398ae16bf783067cd4f1e7e5c282d40577f5)
 
 The _File Browser_ tab is used to load a DICOMDIR. 
 
