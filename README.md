@@ -1,5 +1,5 @@
 # NeuroFlow
-## Brain Imaging Tool - Analyzing Cerebral Flow Dynamics
+## Brain Imaging Tool for Analyzing Cerebral Flow Dynamics
 
 ![NeuroFlow Banner](Logo.png?raw=true)
 
