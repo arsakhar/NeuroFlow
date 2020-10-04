@@ -1,4 +1,4 @@
-# ![NeuroFlow Banner](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Logo.png) NeuroFlow
+# ![NeuroFlow Banner](./readme/Logo.png) NeuroFlow
 ### Brain Imaging Tool for Analyzing Cerebral Flow Dynamics
 
 _Developed by Ashwin Sakhare_
@@ -28,7 +28,7 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 
 #### Load Patient Data
 
-![File Browser Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/FileBrowser.png)
+![File Browser Tab](./readme/FileBrowser.png)
 
 * Select the File Browser tab. Select the DICOMDIR file associated with the patient to be analyzed. Double click the highlighted selection to load the patient.
 
@@ -37,35 +37,35 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 * Select the Series tab.
 * Select a pen from the color palette of pens in the toolbar.
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Pen.png)
+![Toolbar](./readme/Pen.png)
 
 * Click inside the left view panel and drag the left mouse draw a contour around the desired ROI.
 
-![Series Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Segmentation.png)
+![Series Tab](./readme/Segmentation.png)
 
 * To make fine adjustments to the segmentation, select the Mask tab.
 * Select a stamp from the slider in the toolbar.
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Stamp.png)
+![Toolbar](./readme/Stamp.png)
 
 * Select the Mask tab.
 * Click inside the right view panel over to add/remove a mask at a single square pixel or click and drag to modify multiple pixels.
 
-![Mask Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Mask.png)
+![Mask Tab](./readme/Mask.png)
 
 #### View Plot
 
 * Select the Plot tab.
 * Plots for each segmentation can be viewed here.
 
-![Plot Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Plot.png)
+![Plot Tab](./readme/Plot.png)
 
 #### View Analysis
 
 * Select the Analysis tab.
 * A table of flow measurements for each segmentation can be viewed here.
 
-![Analysis Tab](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Analysis.png)
+![Analysis Tab](./readme/Analysis.png)
 
 #### Save Analysis
 
@@ -73,7 +73,7 @@ Refer to the user manual located in the manual directory for a comprehensive gui
 * Select the save icon, specify a save directory, and select ok.
 * Plots, tables, and images are saved to the specified directory.
 
-![Toolbar](https://raw.githubusercontent.com/arsakhar/NeuroFlow/master/readme/Save.png)
+![Toolbar](./readme/Save.png)
 
 - - - -
 
