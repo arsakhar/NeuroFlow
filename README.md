@@ -14,7 +14,7 @@ Phase-contrast MRI (PC-MRI) is a validated, non-invasive MRI imaging technique, 
 
 NeuroFlow was written in Python (v3.8.5). A distributable, NeuroFlow.exe, is included and can be executed as a standalone program. The distributable has only been tested on Windows 10 Pro (10.0.18363 Build 18363).
 
-The source code isn't currently available for public use. However, I hope to make it public within the next few months.
+The source code can be found in the scripts folder.
 
 - - - -
 
