@@ -111,5 +111,5 @@ NeuroFlow would not be possible without liberal imports of PyQt5, NumPy, Pandas,
 
 ### Disclaimer
 
-NeuroFlow has not been rigorously QC tested and we claim no responsibility for inacurrate results.
+NeuroFlow has not been rigorously QC tested and we claim no responsibility for inaccurate results.
 
