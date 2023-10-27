@@ -3,17 +3,17 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QTabWidget, QStackedLayout, QFrame
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout
 
-from Graphics.FlowGraphicsView import FlowGraphicsView
-from Tables.PatientTableView import PatientTableView
-from Toolbar.Toolbar import Toolbar
-from Tables.FlowTableView import FlowTableView
-from FileTreeView import FileTreeView
-from Tables.SeriesTableView import SeriesTableView
-from Graphics.SeriesGraphicsView import SeriesGraphicsView
-from Graphics.MaskGraphicsView import MaskGraphicsView
-from TitleBar import TitleBar
-from SideMenu import SideMenu
-from StatusBar import StatusBar
+from .Graphics.FlowGraphicsView import FlowGraphicsView
+from .Tables.PatientTableView import PatientTableView
+from .Toolbar.Toolbar import Toolbar
+from .Tables.FlowTableView import FlowTableView
+from .FileTreeView import FileTreeView
+from .Tables.SeriesTableView import SeriesTableView
+from .Graphics.SeriesGraphicsView import SeriesGraphicsView
+from .Graphics.MaskGraphicsView import MaskGraphicsView
+from .TitleBar import TitleBar
+from .SideMenu import SideMenu
+from .StatusBar import StatusBar
 from ..Helper.Resources import *
 
 
@@ -50,7 +50,7 @@ class MainWindow(QMainWindow):
         self.maskGraphicsView = MaskGraphicsView(self, self.toolBar)
 
         # Instantiate Series Graphics
-        self.seriesGraphicsView = SeriesGraphicsView(self, self.toolBar)
+        # self.seriesGraphicsView = SeriesGraphicsView(self, self.toolBar)
 
         # Instantiate Series Table
         self.seriesTableView = SeriesTableView(self)
@@ -63,8 +63,7 @@ class MainWindow(QMainWindow):
 
         self.initUI()
 
-        # self.sideMenu.homeBtn.clicked.connect(lambda: self.contentLayout.setCurrentIndex(
-        #     self.sideMenu.HOME_BUTTON))
+        self.sideMenu.homeBtn.clicked.connect(lambda: self.contentLayout.setCurrentIndex(self.sideMenu.HOME_BUTTON))
 
     def initUI(self):
         self.setWindowIcon(QtGui.QIcon(resource_path('icons/logo.png')))
@@ -141,7 +140,7 @@ class MainWindow(QMainWindow):
 
         self.lGraphicsPanel = QTabWidget(self.lGraphicsFrame)
         self.lGraphicsPanel.addTab(self.fileTreeView, "File Browser")
-        self.lGraphicsPanel.addTab(self.seriesGraphicsView, "Series")
+        # self.lGraphicsPanel.addTab(self.seriesGraphicsView, "Series")
         self.lGraphicsPanel.addTab(self.seriesTableView, "Meta Data")
         self.lGraphicsPanel.setTabPosition(QTabWidget.North)
         self.lGraphicsPanel.setStyleSheet("QTabBar::tab { "

@@ -5,8 +5,8 @@ import os
 from PIL import Image
 import numpy as np
 
-from FlowToolbox import FlowToolbox
-from src.neuroflow import LabelGenerator
+from .FlowToolbox import FlowToolbox
+# from src.neuroflow import LabelGenerator
 
 
 """
@@ -114,7 +114,7 @@ class DataWriter():
         maskPath = maskPath.replace('\\', '/')
         maskPath = maskPath.replace('Z:/', '/ifs/loni/faculty/jpa/')
 
-        labelGenerator = LabelGenerator()
+        # labelGenerator = LabelGenerator()
 
         sequence = series.parentSequence
 
@@ -130,7 +130,7 @@ class DataWriter():
 
                 appendLine = [imgPath, subject_id, type, roi, maskPath]
 
-                labelGenerator.update_segmentation_labels_file(appendLine)
+                # labelGenerator.update_segmentation_labels_file(appendLine)
 
     """
     Saves pixel intensity values for phase roi ndarray

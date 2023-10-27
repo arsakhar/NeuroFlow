@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QPen
 import math
 import numpy as np
-import cv2 as cv
+import cv2
 
 from src.neuroflow.Helper.SegmentationRegion import SegmentationRegion
 
@@ -260,7 +260,7 @@ class OverlayGraphics(QGraphicsObject):
             mask = np.uint8(mask * 255).T
 
             # finds all independent contours from a given mask.
-            contours, hierarchy = cv.findContours(image=mask, mode=cv.RETR_TREE, method=cv.CHAIN_APPROX_NONE)
+            contours, hierarchy = cv2.findContours(image=mask, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
 
             # iterate over each contour and store in regions
             for contour in contours:

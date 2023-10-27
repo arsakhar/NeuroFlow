@@ -1,4 +1,4 @@
-from FlowToolbox import FlowToolbox
+from .FlowToolbox import FlowToolbox
 
 
 """

@@ -372,7 +372,7 @@ class TableView(QTableWidget):
         self.setItemDelegate(delegate)
 
     def adjustColumnWidths(self):
-        proposedColWidth = ((self.parent.frameGeometry().width() - 35) / self.columnCount())
+        proposedColWidth = int(((self.parent.frameGeometry().width() - 35) / self.columnCount()))
 
         for column in range(0, self.columnCount()):
             minColWidth = self.sizeHintForColumn(column)

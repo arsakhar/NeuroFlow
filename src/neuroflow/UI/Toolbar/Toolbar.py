@@ -2,14 +2,14 @@ from PyQt5.QtWidgets import QToolButton, QFrame, QHBoxLayout, QVBoxLayout, QWidg
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt, QSize
 
-from KernelButton import KernelButton
-from OverlayButton import OverlayButton
-from PlayButton import PlayButton
-from SaveButton import SaveButton
-from SaveTextBox import SaveTextBox
-from ColorMapButton import ColorMapButton
-from ClearButton import ClearButton
-from AutoSegmentationButton import AutoSegmentationButton
+from .KernelButton import KernelButton
+from .OverlayButton import OverlayButton
+from .PlayButton import PlayButton
+from .SaveButton import SaveButton
+from .SaveTextBox import SaveTextBox
+from .ColorMapButton import ColorMapButton
+from .ClearButton import ClearButton
+from .AutoSegmentationButton import AutoSegmentationButton
 
 
 """

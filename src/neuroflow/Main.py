@@ -1,11 +1,11 @@
-from UI.MainWindow import MainWindow
-from UI.Application import Application
-from UIControllers.UIController import UIController
+from .UI.MainWindow import MainWindow
+from .UI.Application import Application
+from .UIControllers.UIController import UIController
 
 import sys
 
 
-class FlowDyn:
+class NeuroFlow:
     def __init__(self):
         pass
 
@@ -13,7 +13,7 @@ class FlowDyn:
         self.app = Application(sys)
         self.ui_main = MainWindow()
 
-        self.ui_controller = UIController(self.ui_main)
+        # self.ui_controller = UIController(self.ui_main)
 
         sys.exit(self.app.exec_())
 
@@ -22,4 +22,4 @@ class FlowDyn:
 Entry point for entire application
 """
 if __name__ == '__main__':
-    FlowDyn().run()
+    NeuroFlow().run()

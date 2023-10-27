@@ -175,7 +175,7 @@ class PatientTableView(QTableWidget):
             minColWidth = self.sizeHintForColumn(column)
 
             if (proposedColWidth > minColWidth):
-                self.setColumnWidth(column, proposedColWidth)
+                self.setColumnWidth(column, int(proposedColWidth))
 
             else:
                 self.setColumnWidth(column, minColWidth)

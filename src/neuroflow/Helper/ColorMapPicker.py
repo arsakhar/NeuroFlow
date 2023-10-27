@@ -4,7 +4,7 @@ from PyQt5.QtCore import pyqtSignal as Signal
 from matplotlib import cm
 import numpy as np
 
-from Resources import *
+from .Resources import *
 
 PALETTES = {
     'sequential': [['CMRmap', 'icons/colormaps/cmrmap.png'], ['Default', 'icons/colormaps/default.png']]

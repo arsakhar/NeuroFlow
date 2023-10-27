@@ -96,7 +96,7 @@ class FileTreeView(QWidget):
         self.treeLayout.setSpacing(0)
 
         self.centralLayout = QVBoxLayout(self.centralFrame)
-        self.centralLayout.addWidget(self.menuFrame, stretch=.5)
+        self.centralLayout.addWidget(self.menuFrame, stretch=1)
         self.centralLayout.addWidget(self.treeFrame, stretch=4)
         self.centralLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -230,10 +230,10 @@ class TreeView(QTreeView):
         self.setStyleSheet()
 
     def adjustColumnWidths(self):
-        self.setColumnWidth(0, self.frameGeometry().width() * .5)
-        self.setColumnWidth(1, self.frameGeometry().width() * .1)
-        self.setColumnWidth(2,  self.frameGeometry().width() * .2)
-        self.setColumnWidth(3, self.frameGeometry().width() * .2 - 5)
+        self.setColumnWidth(0, int(self.frameGeometry().width() * .5))
+        self.setColumnWidth(1, int(self.frameGeometry().width() * .1))
+        self.setColumnWidth(2,  int(self.frameGeometry().width() * .2))
+        self.setColumnWidth(3, int(self.frameGeometry().width() * .2 - 5))
 
     def setStyleSheet(self):
         super().setStyleSheet("QTreeView::item{\n"

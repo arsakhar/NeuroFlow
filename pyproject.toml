@@ -23,10 +23,12 @@ flake8 = "^6.1.0"
 coverage = {extras = ["toml"], version = "^7.3.2"}
 pytest-cov = "^4.1.0"
 mypy = "^1.6.1"
-pyqt5 = "^5.15.10"
 scikit-image = "^0.22.0"
 pandas = "^2.1.2"
 pydicom = "^2.4.3"
+pyqtgraph = "^0.13.3"
+matplotlib = "^3.8.0"
+opencv-python = "^4.8.1.78"
 
 
 [build-system]

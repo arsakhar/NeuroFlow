@@ -1,7 +1,10 @@
 from PyQt5.QtWidgets import QFrame, QSizePolicy, QHBoxLayout, QPushButton, QWidget, QVBoxLayout
 from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QIcon
 
-from Logo import Logo
+from .Logo import Logo
+
+from ..Helper.Resources import resource_path
 
 
 # creates a side menu located on left side of main window
@@ -38,18 +41,18 @@ class SideMenu(QWidget):
         self.logoLayout.setAlignment(Qt.AlignCenter)
         self.logoLayout.addWidget(self.logoWidget)
 
-        # self.btnsFrame = QFrame(self.centralFrame)
-        #
-        # self.homeBtn = MenuButton(self.btnsFrame)
-        # self.homeBtn.setIcon(QIcon(resource_path("icons/24x24/cil-home")))
-        #
-        # self.btnsLayout = QVBoxLayout(self.btnsFrame)
-        # self.btnsLayout.addWidget(self.homeBtn, alignment=Qt.AlignTop)
+        self.btnsFrame = QFrame(self.centralFrame)
+
+        self.homeBtn = MenuButton(self.btnsFrame)
+        self.homeBtn.setIcon(QIcon(resource_path("icons/24x24/cil-home")))
+
+        self.btnsLayout = QVBoxLayout(self.btnsFrame)
+        self.btnsLayout.addWidget(self.homeBtn, alignment=Qt.AlignTop)
 
         self.centralLayout = QVBoxLayout(self.centralFrame)
         self.centralLayout.setContentsMargins(0, 0, 0, 0)
-        self.centralLayout.addWidget(self.logoFrame, stretch=.5, alignment=Qt.AlignTop)
-        # self.centralLayout.addWidget(self.btnsFrame, stretch=4)
+        self.centralLayout.addWidget(self.logoFrame, stretch=1, alignment=Qt.AlignTop)
+        self.centralLayout.addWidget(self.btnsFrame, stretch=4)
 
         self.uiLayout = QHBoxLayout(self)
         self.uiLayout.addWidget(self.centralFrame)
