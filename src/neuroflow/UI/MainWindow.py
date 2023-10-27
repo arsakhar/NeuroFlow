@@ -50,7 +50,7 @@ class MainWindow(QMainWindow):
         self.maskGraphicsView = MaskGraphicsView(self, self.toolBar)
 
         # Instantiate Series Graphics
-        # self.seriesGraphicsView = SeriesGraphicsView(self, self.toolBar)
+        self.seriesGraphicsView = SeriesGraphicsView(self, self.toolBar)
 
         # Instantiate Series Table
         self.seriesTableView = SeriesTableView(self)
@@ -140,7 +140,7 @@ class MainWindow(QMainWindow):
 
         self.lGraphicsPanel = QTabWidget(self.lGraphicsFrame)
         self.lGraphicsPanel.addTab(self.fileTreeView, "File Browser")
-        # self.lGraphicsPanel.addTab(self.seriesGraphicsView, "Series")
+        self.lGraphicsPanel.addTab(self.seriesGraphicsView, "Series")
         self.lGraphicsPanel.addTab(self.seriesTableView, "Meta Data")
         self.lGraphicsPanel.setTabPosition(QTabWidget.North)
         self.lGraphicsPanel.setStyleSheet("QTabBar::tab { "

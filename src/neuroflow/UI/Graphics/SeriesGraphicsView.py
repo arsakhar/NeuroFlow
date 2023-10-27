@@ -361,6 +361,7 @@ class ImageItem(pg.ImageItem):
         super().__init__()
 
         self.toolBar = toolBar
+        self.image = np.zeros((toolBar.width(), toolBar.height(), 3))
 
     def mouseDragEvent(self, ev, axis=None):
         if self.toolBar.overlayBtn.overlayColor is None:

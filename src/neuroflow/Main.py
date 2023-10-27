@@ -13,7 +13,7 @@ class NeuroFlow:
         self.app = Application(sys)
         self.ui_main = MainWindow()
 
-        # self.ui_controller = UIController(self.ui_main)
+        self.ui_controller = UIController(self.ui_main)
 
         sys.exit(self.app.exec_())
 

@@ -44,12 +44,12 @@ class UIController:
 
     def setPatientLoadedCallbacks(self):
         self.ui_fileTreeView.patientLoaded.connect(self.ui_patientTableView.newPatient)
-        self.ui_fileTreeView.patientLoaded.connect(self.ui_seriesGraphicsView.newPatient)
-        self.ui_fileTreeView.patientLoaded.connect(self.overlay.newPatient)
-        self.ui_fileTreeView.patientLoaded.connect(self.ui_maskGraphicsView.newPatient)
-        self.ui_fileTreeView.patientLoaded.connect(self.ui_flowGraphicsView.newPatient)
-        self.ui_fileTreeView.patientLoaded.connect(self.ui_seriesTableView.newPatient)
-        self.ui_fileTreeView.patientLoaded.connect(self.ui_flowTableView.newPatient)
+        # self.ui_fileTreeView.patientLoaded.connect(self.ui_seriesGraphicsView.newPatient)
+        # self.ui_fileTreeView.patientLoaded.connect(self.overlay.newPatient)
+        # self.ui_fileTreeView.patientLoaded.connect(self.ui_maskGraphicsView.newPatient)
+        # self.ui_fileTreeView.patientLoaded.connect(self.ui_flowGraphicsView.newPatient)
+        # self.ui_fileTreeView.patientLoaded.connect(self.ui_seriesTableView.newPatient)
+        # self.ui_fileTreeView.patientLoaded.connect(self.ui_flowTableView.newPatient)
 
     def setSeriesSelectedCallbacks(self):
         self.ui_patientTableView.seriesSelected.connect(self.ui_toolBar.seriesSelected)

@@ -10,7 +10,7 @@ def resource_path(relative_path):
         base_path = sys._MEIPASS
     else:
         # In development, resource files are in the same directory as the script
-        base_path = os.path.abspath("..")
+        base_path = os.path.abspath("./neuroflow")
 
     return os.path.join(base_path, relative_path)
 

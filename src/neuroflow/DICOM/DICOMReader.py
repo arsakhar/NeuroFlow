@@ -4,7 +4,7 @@ from src.neuroflow.DICOM.Series import Series
 from src.neuroflow.DICOM.Image import Image
 
 import pydicom as dicom
-from pydicom.filereader import read_dicomdir
+from pydicom.filereader import dcmread
 import os
 from _collections import defaultdict
 
@@ -33,47 +33,45 @@ class DICOMReader:
     ================== ===========================================================================
     """
     def load_patient_record(self, dicomdir_path):
-        dicomdir = read_dicomdir(dicomdir_path)
+        dicomdir = dcmread(dicomdir_path)
 
-        # we can't handle more than one patient at the moment
-        if len(dicomdir.patient_records) > 1:
-            return None
+        assert len(dicomdir.patient_records) == 1, "Can only load one patient at a time"
 
-        # iterate over patient records for a patient
-        for patient_record in dicomdir.patient_records:
-            patient = Patient()
-            patient.record = patient_record
+        patient_record = dicomdir.patient_records[0]
 
-            studies = patient_record.children
+        patient = Patient()
+        patient.record = patient_record
 
-            # iterate over study records for a patient record
-            for study_record in studies:
-                study = Study()
-                study.record = study_record
-                patient.studies.append(study)
+        study_records = patient_record.children
 
-                _series = study_record.children
+        # iterate over study records for a patient record
+        for study_record in study_records:
+            study = Study()
+            study.record = study_record
+            patient.studies.append(study)
 
-                # iterate over series records for a study record
-                for series_record in _series:
-                    series = Series()
+            series_records = study_record.children
 
-                    series.record = series_record
-                    study.series.append(series)
+            # iterate over series records for a study record
+            for series_record in series_records:
+                series = Series()
 
-                    images = series_record.children
+                series.record = series_record
+                study.series.append(series)
 
-                    # iterate over image records for a series record
-                    for image_record in images:
-                        image = Image()
-                        image.record = image_record
+                image_records = series_record.children
 
-                        patient_dir = os.path.dirname(dicomdir_path)
-                        image_path = os.path.join(patient_dir, image.record.ReferencedFileID)
-                        image.dataset = dicom.dcmread(image_path)
-                        image.pixel_array = image.dataset.pixel_array
+                # iterate over image records for a series record
+                for image_record in image_records:
+                    image = Image()
+                    image.record = image_record
 
-                        series.images.append(image)
+                    patient_dir = os.path.dirname(dicomdir_path)
+                    image_path = os.path.join(patient_dir, image.record.ReferencedFileID)
+                    image.dataset = dicom.dcmread(image_path)
+                    image.pixel_array = image.dataset.pixel_array
+
+                    series.images.append(image)
 
         return patient
 

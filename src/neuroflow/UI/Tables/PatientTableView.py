@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 
 from ...DICOM.Sequence import Sequence
+from ...DICOM.Patient import Patient
 
 
 """
@@ -58,7 +59,7 @@ class PatientTableView(QTableWidget):
     patient            loaded patient
     ================== ===========================================================================
     """
-    def newPatient(self, patient):
+    def newPatient(self, patient: Patient):
         self.clear()
 
         self.displayAvailableSeries(patient)

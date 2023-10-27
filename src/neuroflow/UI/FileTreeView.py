@@ -97,7 +97,7 @@ class FileTreeView(QWidget):
 
         self.centralLayout = QVBoxLayout(self.centralFrame)
         self.centralLayout.addWidget(self.menuFrame, stretch=1)
-        self.centralLayout.addWidget(self.treeFrame, stretch=4)
+        self.centralLayout.addWidget(self.treeFrame, stretch=10)
         self.centralLayout.setContentsMargins(0, 0, 0, 0)
 
         self.setLayout(self.centralLayout)
@@ -105,7 +105,6 @@ class FileTreeView(QWidget):
     def setWorkingLevel(self):
         self.workingDir = self.model.filePath(self.tree.currentIndex())
 
-        print(self.workingDir)
         if not os.path.isdir(self.workingDir):
             self.workingDir = os.path.dirname(self.workingDir)
 
