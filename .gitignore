@@ -2,6 +2,6 @@
 build/
 documents/
 __pycache__/
-scripts/ML/
+src/neuroflow/ML/
 manual/NeuroFlow Analysis Manual.docx
 NeuroFlow.spec
