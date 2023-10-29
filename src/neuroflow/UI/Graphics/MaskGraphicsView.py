@@ -1,23 +1,45 @@
-from PyQt5.QtCore import pyqtSignal, Qt
+import numpy as np
 import pyqtgraph as pg
+from PIL import Image, ImageDraw
+from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtWidgets import QFrame, QHBoxLayout
 from pyqtgraph import GraphicsView as PGGraphicsView
 from pyqtgraph.GraphicsScene import mouseEvents
-import numpy as np
-from PIL import Image, ImageDraw
-from PyQt5.QtWidgets import QFrame, QHBoxLayout
 
-from src.neuroflow.UI.Graphics.KernelGraphics import KernelGraphics
-from src.neuroflow.UI.Cursor import Cursor
 from src.neuroflow.Helper.SegmentationRegion import SegmentationRegion
+from src.neuroflow.UI.Cursor import Cursor
+from src.neuroflow.UI.Graphics.KernelGraphics import KernelGraphics
 
 
-"""
-Widget displays mask associated with overlay drawn on series graphics
-"""
 class MaskGraphicsView(PGGraphicsView):
+    """
+    Custom graphics view for interactive masking operations.
+
+    This class extends the functionality of PGGraphicsView to provide interactive masking features.
+
+    Attributes
+    ----------
+    newMask : pyqtSignal
+       Signal emitted when a new mask is created or modified.
+
+    """
+
     newMask = pyqtSignal(object)
 
     def __init__(self, parent, toolBar):
+        """
+        Initialize the MaskGraphicsView with the specified parent and toolbar.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget containing the MaskGraphicsView.
+
+        toolBar : ToolBar
+            The toolbar widget associated with the MaskGraphicsView.
+
+        """
+
         super().__init__(parent)
         self.view = ViewBox(self)
 
@@ -41,6 +63,11 @@ class MaskGraphicsView(PGGraphicsView):
         self.initUI()
 
     def initUI(self):
+        """
+        Initialize the user interface of the MaskGraphicsView.
+
+        """
+
         self.centralFrame = QFrame(self)
         self.centralFrame.setFrameShape(QFrame.NoFrame)
         self.centralFrame.setFrameShadow(QFrame.Raised)
@@ -62,39 +89,49 @@ class MaskGraphicsView(PGGraphicsView):
 
         self.show()
 
-    """
-    Called when new patient is loaded. Calls reset function
-    ================== ===========================================================================
-    **Arguments:**
-    patient            loaded patient
-    ================== ===========================================================================
-    """
     def newPatient(self, patient):
+        """
+        Handle a new patient being selected.
+
+        Parameters
+        ----------
+        patient : Patient
+            The selected patient object.
+
+        """
+
         self.reset()
 
-    """
-    Clears mask item and sets image to None
-    """
     def reset(self):
+        """
+        Reset the mask and cursor to default states.
+
+        """
+
         self.maskItem.clear()
         self.setCursor(self.cursor.DefaultCursor)
 
-    """
-    Resets binary mask array in mask item to all 0's
-    """
     def clear(self):
+        """
+        Clear the current mask.
+
+        """
+
         if self.maskItem.image is not None:
             self.maskItem.image[:, :] = 0
             self.maskItem.updateImage()
 
-    """
-    Clears the existing mask. Called when the active series has changed.
-    ================== ===========================================================================
-    **Arguments:**
-    series             the series object
-    ================== ===========================================================================
-    """
     def seriesSelected(self, series):
+        """
+        Handle selection of a new series.
+
+        Parameters
+        ----------
+        series : Series
+            The selected series object.
+
+        """
+
         self.reset()
 
         if series is None:
@@ -122,17 +159,17 @@ class MaskGraphicsView(PGGraphicsView):
 
         self.kernelGraphics.subscribe()
 
-    """
-    Called when the kernel stamper changes the existing mask.
-    ================== ===========================================================================
-    **Arguments:**
-    mask               numpy array mask
-    
-    **Signal:**
-    newMask            returns mask object
-    ================== ===========================================================================
-    """
     def newStamp(self, mask):
+        """
+        Handle a new mask stamp being created.
+
+        Parameters
+        ----------
+        mask : np.ndarray
+            The mask stamp.
+
+        """
+
         self.mask = Mask()
 
         # adjust emitted mask
@@ -158,14 +195,17 @@ class MaskGraphicsView(PGGraphicsView):
 
         self.newMask.emit(self.mask)
 
-    """
-    Updates the mask to match the overlay. Overlay is assumed to be in image item coordinates.
-    ================== ===========================================================================
-    **Arguments:**
-    overlay            overlay object containing all independent overlays
-    ================== ===========================================================================
-    """
     def newOverlay(self, overlay):
+        """
+        Apply a new mask overlay on the current mask.
+
+        Parameters
+        ----------
+        overlay : Overlay
+            The overlay object containing regions to be applied on the mask.
+
+        """
+
         self.view.removeItem(self.maskItem)
 
         imageShape = (self.maskItem.image.shape[0], self.maskItem.image.shape[1])
@@ -213,14 +253,17 @@ class MaskGraphicsView(PGGraphicsView):
 
         self.newMask.emit(self.mask)
 
-    """
-    Updates the mask to match the overlay. Overlay is assumed to be in image item coordinates.
-    ================== ===========================================================================
-    **Arguments:**
-    vertices           A list of tuples containing vertices from autosegmentation routine
-    ================== ===========================================================================
-    """
     def newAutoSeg(self, vertices):
+        """
+        Apply a new auto-segmentation on the current mask.
+
+        Parameters
+        ----------
+        vertices : list of tuple
+            List of (x, y) coordinates representing the vertices of the auto-segmentation polygon.
+
+        """
+
         self.view.removeItem(self.maskItem)
 
         imageShape = (self.maskItem.image.shape[0], self.maskItem.image.shape[1])
@@ -251,14 +294,40 @@ class MaskGraphicsView(PGGraphicsView):
 
 
 class Mask:
+    """
+    Represents a mask containing regions of interest.
+
+    This class defines a mask object that contains a list of regions of interest (ROIs).
+
+    Attributes
+    ----------
+    regions : list
+        A list to store the regions of interest in the mask.
+
+    """
+
     def __init__(self):
+        """
+        Initializes an empty mask with no regions.
+
+        """
+
         self.regions = []
 
 
-"""
-The pyqtgraph viewbox. The viewbox displays items.
-"""
 class ViewBox(pg.ViewBox):
+    """
+    Custom ViewBox for interactive plotting.
+
+    This class extends the functionality of the pg.ViewBox by providing custom mouse event handling.
+
+    Attributes
+    ----------
+    graphicsWidget : QGraphicsWidget
+        Parent graphics widget associated with the ViewBox.
+
+    """
+
     def __init__(self, parent):
         super().__init__()
 
@@ -275,17 +344,49 @@ class ViewBox(pg.ViewBox):
             return
 
 
-"""
-The pyqtgraph image item. An image item stores the images.
-"""
 class MaskItem(pg.ImageItem):
+    """
+    Custom ImageItem for displaying and interacting with masked images in a PlotWidget.
+
+    This class extends the functionality of the pg.ImageItem by providing signals for left mouse press and drag events.
+
+    Attributes
+    ----------
+    leftMousePressed : pyqtSignal
+       Signal emitted when a left mouse button is pressed on the MaskItem.
+
+    leftMouseDragged : pyqtSignal
+       Signal emitted when the left mouse button is dragged on the MaskItem.
+
+    """
+
     leftMousePressed = pyqtSignal(mouseEvents.MouseClickEvent)
     leftMouseDragged = pyqtSignal(mouseEvents.MouseDragEvent)
 
     def __init__(self, image=None):
+        """
+        Initialize the MaskItem with the specified image.
+
+        Parameters
+        ----------
+        image : QImage, optional
+            The image to be displayed in the MaskItem.
+
+        """
+
         super().__init__(image=image)
 
     def mouseClickEvent(self, ev):
+        """
+        Handle mouse click events on the MaskItem.
+
+        Parameters
+        ----------
+        ev : QGraphicsSceneMouseEvent
+            The mouse event object containing information about the click event.
+
+        """
+
         if ev.button() == Qt.RightButton:
             return
 
@@ -293,18 +394,57 @@ class MaskItem(pg.ImageItem):
             self.leftMousePressed.emit(ev)
 
     def mouseDragEvent(self, ev):
+        """
+        Handle mouse drag events on the MaskItem.
+
+        Parameters
+        ----------
+        ev : QGraphicsSceneMouseEvent
+            The mouse event object containing information about the drag event.
+
+        """
+
         if ev.button() != Qt.LeftButton:
             return
         else:
             self.leftMouseDragged.emit(ev)
 
     def updateImage(self, *args, **kargs):
+        """
+        Update the image displayed in the MaskItem.
+
+        Parameters
+        ----------
+        *args, **kargs
+            Additional arguments to update the image.
+
+        """
+
         super().updateImage(*args, **kargs)
 
 
-"""
-The pyqtgraph grid item. A grid item displays grid lines
-"""
 class GridItem(pg.GridItem):
-    def __init__(self, textPen=None):
+    """
+    Custom grid item for a PlotWidget.
+
+    This class extends the functionality of the pg.GridItem by allowing customization of the text pen.
+
+    Parameters
+    ----------
+    textPen : QColor or None, optional
+        Pen color for the grid text. If None, the default color is used.
+
+    """
+
+    def __init__(self, textPen =None):
+        """
+        Initialize the GridItem with the specified text pen color.
+
+        Parameters
+        ----------
+        textPen : QColor or None, optional
+            Pen color for the grid text. If None, the default color is used.
+
+        """
+
         super().__init__(textPen=textPen)

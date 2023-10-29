@@ -48,8 +48,8 @@ class DataWriter():
         saveDialog = QFileDialog()
         saveDialog.setFileMode(QFileDialog.DirectoryOnly)
         location = saveDialog.getExistingDirectory(saveDialog,
-                                             caption='Select Save Directory',
-                                             directory=self.fileSystem.activeDir)
+                                                   caption='Select Save Directory',
+                                                   directory=self.fileSystem.activeDir)
 
         self.saveDir = os.path.join(location, 'nf_output')
 

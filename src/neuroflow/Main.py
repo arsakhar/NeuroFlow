@@ -1,25 +1,23 @@
-from .UI.MainWindow import MainWindow
-from .UI.Application import Application
-from .UIControllers.UIController import UIController
-
 import sys
 
-
-class NeuroFlow:
-    def __init__(self):
-        pass
-
-    def run(self):
-        self.app = Application(sys)
-        self.ui_main = MainWindow()
-
-        self.ui_controller = UIController(self.ui_main)
-
-        sys.exit(self.app.exec_())
+from .UI.Application import Application
+from .UI.MainWindow import MainWindow
+from .UIControllers.UIController import UIController
 
 
-"""
-Entry point for entire application
-"""
+def run():
+    """
+    Main function to run the NeuroFlow application.
+    """
+    try:
+        app = Application(sys)
+        ui_main = MainWindow()
+        ui_controller = UIController(ui_main)
+        sys.exit(app.exec_())
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
 if __name__ == '__main__':
-    NeuroFlow().run()
+    run()

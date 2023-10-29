@@ -1,25 +1,46 @@
-from PyQt5.QtWidgets import QTableWidget, QAbstractScrollArea, QTableWidgetItem, QHBoxLayout, QWidget, QCheckBox
-from PyQt5.QtWidgets import QFrame, QAbstractItemView
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QFrame, QAbstractItemView
+from PyQt5.QtWidgets import QTableWidget, QAbstractScrollArea, QTableWidgetItem, QHBoxLayout, QWidget, QCheckBox
 
-from ...DICOM.Sequence import Sequence
 from ...DICOM.Patient import Patient
+from ...DICOM.Sequence import Sequence
 
 
-"""
-Widget used to display patient data in table format.
-"""
 class PatientTableView(QTableWidget):
+    """
+    A table view widget for displaying patient data.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget.
+    """
+
     seriesSelected = pyqtSignal(object)
     sequenceSelected = pyqtSignal(object)
 
     def __init__(self, parent):
+        """
+        Initialize the PatientTableView.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__()
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initialize the user interface of the table view.
+
+        """
+
         self.centralFrame = QFrame(self)
         self.centralFrame.setFrameShape(QFrame.NoFrame)
         self.centralFrame.setFrameShadow(QFrame.Raised)
@@ -52,33 +73,41 @@ class PatientTableView(QTableWidget):
 
         self.setStyleSheet()
 
-    """
-    Called when new patient is loaded. Calls reset and display series functions
-    ================== ===========================================================================
-    **Arguments:**
-    patient            loaded patient
-    ================== ===========================================================================
-    """
     def newPatient(self, patient: Patient):
+        """
+        Called when a new patient is loaded. Resets and displays series for the given patient.
+
+        Parameters
+        ----------
+        patient : Patient
+            Loaded patient object.
+
+        """
+
         self.clear()
 
         self.displayAvailableSeries(patient)
 
-    """
-    Resets and clears table
-    """
     def clear(self):
+        """
+        Resets and clears the table.
+
+        """
+
         super().clear()
         self.setRowCount(0)
 
-    """
-    Loads each series for a given patient and displays it's relevant information
-    ================== ===========================================================================
-    **Arguments:**
-    patient            loaded patient
-    ================== ===========================================================================
-    """
     def displayAvailableSeries(self, patient):
+        """
+        Loads each series for a given patient and displays its relevant information.
+
+        Parameters
+        ----------
+        patient : Patient
+            Loaded patient object.
+
+        """
+
         self.headers = ['Active', 'Patient ID', 'Study ID', 'Sequence',
                         'Series #', '# Images', 'Venc', 'Image Type', 'BPM']
         self.setColumnCount(len(self.headers))
@@ -120,14 +149,17 @@ class PatientTableView(QTableWidget):
         self.setItemDelegate(delegate)
         self.adjustColumnWidths()
 
-    """
-    Called when a series is selected. Emits a signal containing active series
-    ================== ===========================================================================
-    **Arguments:**
-    activeToggle       the toggle associated with the selected series
-    ================== ===========================================================================
-    """
     def seriesToggled(self, activeToggle):
+        """
+        Called when a series is selected. Emits a signal containing the active series.
+
+        Parameters
+        ----------
+        activeToggle : Toggle
+            The toggle associated with the selected series.
+
+        """
+
         if activeToggle.chkBox.isChecked():
             self.seriesSelected.emit(activeToggle.series)
 
@@ -141,24 +173,30 @@ class PatientTableView(QTableWidget):
             if toggle != activeToggle:
                 toggle.chkBox.setChecked(False)
 
-    """
-    Called when view area of table is resized. Calls adjust column widths function
-    ================== ===========================================================================
-    **Arguments:**
-    event              pyqt event associated with resize event
-    ================== ===========================================================================
-    """
     def resizeEvent(self, event):
+        """
+        Called when the view area of the table is resized. Adjusts column widths accordingly.
+
+        Parameters
+        ----------
+        event : QResizeEvent
+            PyQt event associated with the resize event.
+
+        """
+
         self.adjustColumnWidths()
 
-    """
-    Adjusts column widths to fit data. If initial is set to True, adjusts column sizes with no data
-    ================== ===========================================================================
-    **Arguments:**
-    initial            column width adjustment is slightly different based on if table has data
-    ================== ===========================================================================
-    """
     def adjustColumnWidths(self, initial=None):
+        """
+        Adjusts column widths to fit data. If initial is set to True, adjusts column sizes with no data.
+
+        Parameters
+        ----------
+        initial : bool, optional
+            Indicates whether the adjustment is initial or not.
+
+        """
+
         self.resizeColumnToContents(0)
 
         if initial is not None:
@@ -183,10 +221,12 @@ class PatientTableView(QTableWidget):
 
         self.horizontalHeader().setStretchLastSection(True)
 
-    """
-    Sets stylesheet for table view
-    """
     def setStyleSheet(self):
+        """
+        Sets the stylesheet for the table view.
+
+        """
+
         super().setStyleSheet("QTableWidget{border: 1px solid gray;}"
                               "QTableWidget::item{"
                               "border-color: rgb(44, 49, 60);"
@@ -221,13 +261,58 @@ class PatientTableView(QTableWidget):
                               "}"
                               "")
 
-"""
-Widget containing a center-aligned checkbox.
-"""
+
 class Toggle(QWidget):
+    """
+    Widget containing a center-aligned checkbox.
+
+    This class represents a widget containing a center-aligned checkbox, associated with a specific series object.
+
+    Attributes
+    ----------
+    toggled : pyqtSignal
+       Signal emitted when the checkbox is toggled.
+
+    Methods
+    -------
+    __init__(self, series)
+       Initialize the Toggle widget with the provided series object.
+
+    initUI(self)
+       Initialize the user interface of the Toggle widget.
+
+    clicked(self)
+       Called when the checkbox is clicked. Emits a signal indicating the toggle state.
+
+    Notes
+    -----
+    Inherits from QWidget.
+
+    Parameters
+    ----------
+    series : object
+       Series object associated with the toggle.
+
+    Examples
+    --------
+    toggle = Toggle(series_object)
+    toggle.toggled.connect(toggle_handler_function)
+
+    """
+
     toggled = pyqtSignal(object)
 
     def __init__(self, series):
+        """
+        Initialize the Toggle widget.
+
+        Parameters
+        ----------
+        series : object
+            Series object associated with the toggle.
+
+        """
+
         super().__init__()
 
         self.series = series
@@ -237,6 +322,11 @@ class Toggle(QWidget):
         self.chkBox.clicked.connect(self.clicked)
 
     def initUI(self):
+        """
+        Initialize the user interface of the Toggle widget.
+
+        """
+
         self.centralFrame = QFrame(self)
 
         self.chkBox = QCheckBox(self.centralFrame)
@@ -253,16 +343,98 @@ class Toggle(QWidget):
         self.centralFrame.setStyleSheet(u"background-color: rgb(15, 15, 15);")
 
     def clicked(self):
+        """
+        Called when the checkbox is clicked. Emits a signal indicating the toggle state.
+
+        """
+
         self.toggled.emit(self)
 
 
 class CellItem(QTableWidgetItem):
+    """
+       Table item with read-only property.
+
+       This class represents a table item with read-only properties, which means the cell cannot be edited.
+
+       Attributes
+       ----------
+       None
+
+       Methods
+       -------
+       __init__(self, item)
+           Initialize the CellItem with the provided item.
+
+       Notes
+       -----
+       Inherits from QTableWidgetItem.
+
+       Parameters
+       ----------
+       item : object
+           The item to be displayed in the cell.
+
+       Examples
+       --------
+       cell = CellItem("Read-only Text")
+       tableWidget.setItem(0, 0, cell)
+
+       """
+
     def __init__(self, item):
+        """
+        Initialize the CellItem.
+
+        Parameters
+        ----------
+        item : object
+            The item to be displayed in the cell.
+
+        """
+
         super().__init__(item)
         self.setFlags(Qt.NoItemFlags)
 
 
 class AlignDelegate(QtWidgets.QStyledItemDelegate):
+    """
+       A delegate for center-aligned table items.
+
+       This delegate is used to ensure the text alignment of table items is centered.
+
+       Attributes
+       ----------
+       None
+
+       Methods
+       -------
+       initStyleOption(option, index)
+           Initialize the style options for the table items.
+
+       Notes
+       -----
+       Inherits from QtWidgets.QStyledItemDelegate.
+
+       Examples
+       --------
+       delegate = AlignDelegate()
+       tableView.setItemDelegate(delegate)
+
+       """
+
     def initStyleOption(self, option, index):
+        """
+        Initialize the style options for the table items.
+
+        Parameters
+        ----------
+        option : QStyleOptionViewItem
+            Style options for the item.
+        index : QModelIndex
+            Index of the item in the table.
+
+        """
+
         super(AlignDelegate, self).initStyleOption(option, index)
         option.displayAlignment = Qt.AlignCenter

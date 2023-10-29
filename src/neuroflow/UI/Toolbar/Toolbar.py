@@ -1,27 +1,93 @@
-from PyQt5.QtWidgets import QToolButton, QFrame, QHBoxLayout, QVBoxLayout, QWidget, QLabel
-from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QToolButton, QFrame, QHBoxLayout, QVBoxLayout, QWidget, QLabel
 
+from .AutoSegmentationButton import AutoSegmentationButton
+from .ClearButton import ClearButton
+from .ColorMapButton import ColorMapButton
 from .KernelButton import KernelButton
 from .OverlayButton import OverlayButton
 from .PlayButton import PlayButton
 from .SaveButton import SaveButton
 from .SaveTextBox import SaveTextBox
-from .ColorMapButton import ColorMapButton
-from .ClearButton import ClearButton
-from .AutoSegmentationButton import AutoSegmentationButton
 
 
-"""
-Widget used to display the toolbar containing tool buttons
-"""
 class Toolbar(QWidget):
+    """
+    A custom QWidget representing a toolbar with various tool buttons for image processing.
+
+    Parameters
+    ----------
+    mainWindow : QWidget
+        The main window widget to which the toolbar belongs.
+
+    Attributes
+    ----------
+    centralFrame : QFrame
+        The central frame containing all the tool buttons and labels.
+
+    imageFrame : QFrame
+        Frame containing image-related buttons and label.
+
+    imageLabel : Label
+        Label displaying "SERIES" text.
+
+    playBtn : PlayButton
+        Button for playing the image series.
+
+    colorMapBtn : ColorMapButton
+        Button for selecting color maps for the image.
+
+    overlayBtn : OverlayButton
+        Button for overlaying images.
+
+    autoSegBtn : AutoSegmentationButton
+        Button for automatic segmentation.
+
+    clearBtn : ClearButton
+        Button for clearing the current selection.
+
+    maskFrame : QFrame
+        Frame containing mask-related buttons and label.
+
+    maskLabel : Label
+        Label displaying "MASK" text.
+
+    kernelBtn : KernelButton
+        Button for drawing on the mask.
+
+    analysisFrame : QFrame
+        Frame containing analysis-related buttons and label.
+
+    saveBtn : SaveButton
+        Button for saving the output.
+
+    saveTxtBox : SaveTextBox
+        Text box for entering save file name.
+
+    """
+
     def __init__(self, mainWindow):
+        """
+        Initialize the Toolbar widget.
+
+        Parameters
+        ----------
+        mainWindow : QWidget
+            The main window widget to which the toolbar belongs.
+
+        """
+
         super().__init__(mainWindow)
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initialize the user interface components and layout for the toolbar.
+
+        """
+
         self.centralFrame = QFrame(self)
         self.centralFrame.setFixedHeight(39)
         self.centralFrame.setFrameShape(QFrame.NoFrame)
@@ -207,15 +273,21 @@ class Toolbar(QWidget):
             "border: 1px solid gray;"
             "border-radius: 5px;")
 
-    """
-    Sets the tool buttons to an enabled or disabled state based on whether an active series
-    is provided.
-    ================== ===========================================================================
-    **Arguments:**
-    series             the series object
-    ================== ===========================================================================
-    """
     def seriesSelected(self, series):
+        """
+        Enable or disable tool buttons based on whether an active series is provided.
+
+        Parameters
+        ----------
+        series : object
+            The series object.
+
+        Returns
+        -------
+        None
+
+        """
+
         if series is None:
             self.setDisabled(True)
 
@@ -228,6 +300,20 @@ class Toolbar(QWidget):
         self.saveTxtBox.setDefaultText()
 
     def setButtonStyleSheet(self, toolBtn):
+        """
+         Set the style sheet for the given tool button.
+
+         Parameters
+         ----------
+         toolBtn : QToolButton
+             The tool button to set the style sheet for.
+
+         Returns
+         -------
+         None
+
+         """
+
         toolBtn.setStyleSheet(u"QToolButton {"
                               "border: none;"
                               "background-color: transparent;"
@@ -245,29 +331,73 @@ class Toolbar(QWidget):
                               "}")
 
 
-"""
-Widget to create tool buttons
-"""
 class ToolButton(QToolButton):
+    """
+    Custom QToolButton representing a tool button in the toolbar.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the tool button.
+
+    """
+
     def __init__(self, parent):
+        """
+        Initialize the ToolButton widget.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget for the tool button.
+
+        """
+
         super().__init__(parent)
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initialize the user interface components and layout for the tool button.
+
+        """
+
         pass
 
 
-"""
-Widget to create toolbar labels
-"""
 class Label(QLabel):
+    """
+    Custom QLabel representing a label in the toolbar.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the label.
+
+    """
+
     def __init__(self, parent):
+        """
+        Initialize the Label widget.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget for the label.
+
+        """
+
         super().__init__(parent)
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initialize the user interface components and layout for the label.
+
+        """
+
         self.setContentsMargins(0, 0, 0, 0)
         font = QFont()
         font.setFamily(u"Segoe UI")

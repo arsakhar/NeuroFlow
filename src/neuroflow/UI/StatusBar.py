@@ -1,14 +1,55 @@
-from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget, QSizeGrip
-from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QFont, QPixmap
+from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QWidget, QSizeGrip
 
 from ..Helper.Resources import *
 
-"""
-Creates a status bar for main window
-"""
+
 class StatusBar(QWidget):
+    """
+    Custom status bar widget displaying developer information, application version, and a size grip for window resizing.
+
+    Attributes
+    ----------
+    developerLabel : QLabel
+        QLabel displaying the developer's name.
+
+    instituteLabel : QLabel
+        QLabel displaying the institute's name.
+
+    universityLabel : QLabel
+        QLabel displaying the university's name.
+
+    versionLabel : QLabel
+        QLabel displaying the application version.
+
+    sizegrip : QSizeGrip
+        QSizeGrip widget for window resizing.
+
+    gripLabel : QLabel
+        QLabel displaying the grip icon for window resizing.
+
+    Methods
+    -------
+    __init__(self, parent)
+        Constructs the StatusBar object.
+
+    initUI(self)
+        Initializes the user interface components and layouts.
+
+    """
+
     def __init__(self, parent):
+        """
+        Constructs the StatusBar object.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget of the StatusBar.
+
+        """
+
         super().__init__()
 
         self.parent = parent
@@ -16,6 +57,11 @@ class StatusBar(QWidget):
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the user interface components and layouts.
+
+        """
+
         self.centralFrame = QFrame(self)
         self.centralFrame.setFrameShape(QFrame.NoFrame)
         self.centralFrame.setFrameShadow(QFrame.Raised)
@@ -66,11 +112,6 @@ class StatusBar(QWidget):
         self.gripFrame.setMaximumSize(QSize(20, 20))
         self.gripFrame.setContentsMargins(0, 0, 0, 0)
 
-        # path = resource_path('icons/cil-size-grip.png')
-        # self.gripFrame.setStyleSheet("background-image: url(" + str(path) + "); \n"
-        #                              "background-position: center; \n"
-        #                              "background-repeat: no repeat")
-
         self.sizegrip = QSizeGrip(self.gripFrame)
         self.sizegrip.setStyleSheet("width: 20px; height: 20px; margin 0px; padding: 0px;")
 
@@ -98,12 +139,40 @@ class StatusBar(QWidget):
 
 
 class Label(QLabel):
+    """
+    Custom QLabel widget with specific font and style settings.
+
+    Methods
+    -------
+    __init__(self, parent)
+        Constructs the Label object.
+
+    initUI(self)
+        Initializes the user interface components and layouts.
+
+    """
+
     def __init__(self, parent):
+        """
+        Constructs the Label object.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget of the Label.
+
+        """
+
         super().__init__(parent)
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the user interface components and layouts.
+
+        """
+
         font = QFont()
         font.setFamily(u"Segoe UI")
 

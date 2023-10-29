@@ -1,29 +1,37 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QTabWidget, QStackedLayout, QFrame
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QTabWidget, QStackedLayout, QFrame, QVBoxLayout, QHBoxLayout
 
-from .Graphics.FlowGraphicsView import FlowGraphicsView
-from .Tables.PatientTableView import PatientTableView
-from .Toolbar.Toolbar import Toolbar
-from .Tables.FlowTableView import FlowTableView
 from .FileTreeView import FileTreeView
-from .Tables.SeriesTableView import SeriesTableView
-from .Graphics.SeriesGraphicsView import SeriesGraphicsView
+from .Graphics.FlowGraphicsView import FlowGraphicsView
 from .Graphics.MaskGraphicsView import MaskGraphicsView
-from .TitleBar import TitleBar
+from .Graphics.SeriesGraphicsView import SeriesGraphicsView
 from .SideMenu import SideMenu
 from .StatusBar import StatusBar
+from .Tables.FlowTableView import FlowTableView
+from .Tables.PatientTableView import PatientTableView
+from .Tables.SeriesTableView import SeriesTableView
+from .TitleBar import TitleBar
+from .Toolbar.Toolbar import Toolbar
 from ..Helper.Resources import *
 
 
-"""
-Widget containing the main window (everything the user sees)
-"""
 class MainWindow(QMainWindow):
-    FILE_TREE_VIEW = 0
-    SERIES_GRAPHICS_VIEW = 1
-    SERIES_TABLE_VIEW = 2
+    """
+    The main window of the application containing various widgets and layouts for UI elements.
+
+    Methods:
+        __init__(): Constructor method for initializing the MainWindow object.
+        initUI(): Initializes the user interface components and layouts.
+        moveWindow(ev): Allows the main window to be moved by dragging the title bar.
+
+    Signals:
+        No signals are defined in this class.
+    """
+
+    # FILE_TREE_VIEW = 0
+    # SERIES_GRAPHICS_VIEW = 1
+    # SERIES_TABLE_VIEW = 2
 
     def __init__(self):
         super().__init__()

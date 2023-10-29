@@ -1,26 +1,87 @@
-from PyQt5.QtWidgets import QFileSystemModel, QTreeView, QPushButton, QWidget, QHBoxLayout, QVBoxLayout, QFrame
+from pathlib import Path
+from typing import Union
+
 from PyQt5.QtCore import Qt, QSize, pyqtSignal
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QFileSystemModel, QTreeView, QPushButton, QWidget, QHBoxLayout, QVBoxLayout, QFrame
 
 from ..DICOM.DICOMReader import DICOMReader
 from ..DICOM.Patient import Patient
 from ..Helper.Resources import *
 
 
-"""
-Widget used as a container for the file system and tree view.
-"""
 class FileTreeView(QWidget):
-    patientLoaded = pyqtSignal(Patient)
+    """
+    A widget to display a file tree view and handle directory selection events.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for this FileTreeView.
+
+    Signals
+    -------
+    patientLoaded : pyqtSignal
+        Signal emitted when a patient is loaded. The signal carries a Patient object.
+
+    Attributes
+    ----------
+    workingDir : str
+        The current working directory path.
+
+    rootDir : str
+        The root directory path.
+
+    fileExtensionFilters : list of str
+        List of file extensions to filter files in the tree view.
+
+    dicomdirFilter : str
+        Filter for DICOM directories.
+
+    imageFilters : list of str
+        List of supported image file formats.
+
+    model : FileSystemModel
+        File system model for the tree view.
+
+    tree : TreeView
+        Tree view widget displaying the file system.
+
+    rootBtn : MenuButton
+        Button to go to the root directory.
+
+    workingBtn : MenuButton
+        Button to set the working directory.
+
+    openBtn : MenuButton
+        Button to open a selected patient's data.
+
+    activeDir : str
+        The currently active directory path.
+    """
+
+    patientLoaded = pyqtSignal(object)
 
     def __init__(self, parent):
+        """
+        Initializes the FileTreeView widget.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__()
+
+        self.parent = parent
 
         self.workingDir = appSettings.value('dirPath', '')
         self.rootDir = ''
 
         self.fileExtensionFilters = ['*.DCM', '*.IMA']
-        self.dicomDirFilter = 'DICOMDIR'
+        self.dicomdirFilter = 'DICOMDIR'
         self.imageFilters = ['DCM', 'IMA']
 
         self.model = None
@@ -40,6 +101,11 @@ class FileTreeView(QWidget):
         self.openBtn.clicked.connect(self.checkSelection)
 
     def initUI(self):
+        """
+        Initializes the user interface of the FileTreeView widget.
+
+        """
+
         self.centralFrame = QFrame(self)
         self.centralFrame.setFrameShape(QFrame.NoFrame)
         self.centralFrame.setFrameShadow(QFrame.Raised)
@@ -79,7 +145,7 @@ class FileTreeView(QWidget):
         self.treeFrame.setStyleSheet("border: none;")
 
         self.model = FileSystemModel(self.treeFrame)
-        self.model.setNameFilters(self.fileExtensionFilters + [self.dicomDirFilter])
+        self.model.setNameFilters(self.fileExtensionFilters + [self.dicomdirFilter])
         self.model.setNameFilterDisables(False)
         self.model.setRootPath(self.workingDir)
 
@@ -103,6 +169,11 @@ class FileTreeView(QWidget):
         self.setLayout(self.centralLayout)
 
     def setWorkingLevel(self):
+        """
+        Sets the working directory level based on the selected item in the tree view.
+
+        """
+
         self.workingDir = self.model.filePath(self.tree.currentIndex())
 
         if not os.path.isdir(self.workingDir):
@@ -118,90 +189,142 @@ class FileTreeView(QWidget):
         appSettings.setValue("dirPath", self.workingDir)
 
     def setRootLevel(self):
+        """
+        Sets the root directory level in the tree view.
+
+        """
+
         self.tree.setRootIndex(self.model.index(self.rootDir))
         self.model.setRootPath(self.rootDir)
 
         self.activeDir = self.rootDir
 
     def checkSelection(self):
-        filePath = self.model.filePath(self.tree.currentIndex())
+        """
+        Checks the selected item in the tree view and opens DICOM directories or image files.
 
-        if os.path.isdir(filePath):
+        """
+
+        filepath = Path(self.model.filePath(self.tree.currentIndex()))
+
+        if not filepath.is_file():
             return
 
-        if not os.path.isfile(filePath):
-            return
-
-        fileName = os.path.basename(filePath)
-
-        if fileName == self.dicomDirFilter:
-            self.openDICOMDir(filePath)
-
-        # elif any(extension in fileName for extension in self.imageFilters):
-        #     self.parseDir(os.path.dirname(filePath))
+        if filepath.name == self.dicomdirFilter:
+            self.openDICOMDIR(filepath)
 
         else:
             return
 
-        self.activeDir = os.path.dirname(filePath)
+        self.activeDir = os.path.dirname(filepath)
 
-    """
-    Opens selected DICOMDir file.
-    ================== ===========================================================================
-    **Arguments:**
-    index              tree double clicked event returns an index. index can then be 
-                       converted to filepath
-    
-    **Signal:**
-    patientLoaded      returns patient
-    ================== ===========================================================================
-    """
-    def openDICOMDir(self, DICOMDirPath):
-        if os.path.isfile(DICOMDirPath):
-            self.dicomReader = DICOMReader()
+    def openDICOMDIR(self, filepath: Union[str, Path]):
+        """
+        Opens the selected DICOM directory and emits the patientLoaded signal.
 
-            patient = self.dicomReader.load_patient_record(DICOMDirPath)
+        Parameters
+        ----------
+        filepath : Union[str, Path]
+            Path to the selected DICOM directory.
 
-            if patient is None:
-                return
+        """
 
-            self.patientLoaded.emit(patient)
+        filepath = Path(filepath)
 
-            # self.activeDir = os.path.dirname(DICOMDirPath)
+        if filepath.is_file():
+            self.dicomdir_reader = DICOMReader()
 
-    def parseDir(self, dirPath):
-        if os.path.isdir(dirPath):
-            self.dicomReader = DICOMReader()
-
-            patient = self.dicomReader.try_parse_dir(dirPath)
+            patient = self.dicomdir_reader.load_patient_record(filepath)
 
             if patient is None:
                 return
 
             self.patientLoaded.emit(patient)
-
-            # self.activeDir = dirPath
 
     def resizeEvent(self, event):
+        """
+        Overrides the resizeEvent method to adjust the tree view's size.
+
+        Parameters
+        ----------
+        event : QResizeEvent
+            The resize event.
+
+        """
+
         self.tree.resize(self.frameGeometry().width(), self.frameGeometry().height())
         self.tree.adjustColumnWidths()
 
 
-"""
-Creates a QFileSystemModel. This is along with QTreeView creates a file system that can be browsed within the widget.
-"""
 class FileSystemModel(QFileSystemModel):
+    """
+    Custom QFileSystemModel class to handle file system operations.
+
+    """
+
     def __init__(self, parent):
+        """
+        Initializes the FileSystemModel.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.setNameFilterDisables(False)
 
 
-"""
-Creates a QTreeView. This is used to display the file system tree.
-"""
 class TreeView(QTreeView):
+    """
+    Custom QTreeView class for displaying the file system tree.
+
+    This class extends QTreeView to create a customized tree view widget for displaying the file system.
+    It includes specific styles and column width adjustments.
+
+    Parameters
+    ----------
+    parent : QWidget
+       The parent widget.
+
+    Attributes
+    ----------
+    parent : QWidget
+       The parent widget.
+
+    centralFrame : QFrame
+       Frame widget to hold the tree view.
+
+    centralLayout : QVBoxLayout
+       Layout for the central frame.
+
+    Methods
+    -------
+    initUI()
+       Initializes the user interface of the TreeView widget.
+
+    adjustColumnWidths()
+       Adjusts the column widths of the tree view based on the widget's geometry.
+
+    setStyleSheet()
+       Sets the custom style sheet for the tree view.
+
+    """
+
     def __init__(self, parent):
+        """
+        Initializes the TreeView.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.parent = parent
@@ -213,6 +336,13 @@ class TreeView(QTreeView):
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the user interface of the TreeView widget.
+
+        This method sets up the central frame and layout for the tree view.
+
+        """
+
         self.centralFrame = QFrame(self)
         self.centralFrame.setFrameShape(QFrame.NoFrame)
         self.centralFrame.setFrameShadow(QFrame.Raised)
@@ -229,12 +359,24 @@ class TreeView(QTreeView):
         self.setStyleSheet()
 
     def adjustColumnWidths(self):
+        """
+        Adjusts the column widths of the tree view.
+
+        This method adjusts the column widths based on the width of the widget.
+
+        """
+
         self.setColumnWidth(0, int(self.frameGeometry().width() * .5))
         self.setColumnWidth(1, int(self.frameGeometry().width() * .1))
         self.setColumnWidth(2,  int(self.frameGeometry().width() * .2))
         self.setColumnWidth(3, int(self.frameGeometry().width() * .2 - 5))
 
     def setStyleSheet(self):
+        """
+        Adjusts the column widths of the tree view.
+
+        """
+
         super().setStyleSheet("QTreeView::item{\n"
                               "	border-color: rgb(44, 49, 60);\n"
                               "	padding-left: 5px;\n"
@@ -273,12 +415,51 @@ class TreeView(QTreeView):
 
 
 class MenuButton(QPushButton):
+    """
+    Custom QPushButton class for menu buttons.
+
+    This class extends QPushButton to create customized menu buttons with specific styles.
+
+    Parameters
+    ----------
+    parent : QWidget
+       The parent widget.
+
+    Attributes
+    ----------
+    None
+
+    Methods
+    -------
+    initUI()
+       Initialize the appearance and behavior of the MenuButton.
+
+    """
+
     def __init__(self, parent):
+        """
+        Initializes the MenuButton.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initialize the appearance and behavior of the MenuButton.
+
+        The MenuButton is styled with specific properties for normal, hover, and pressed states.
+        Additionally, tooltips are styled to have white text on a black background with a black border.
+
+        """
+
         self.setIconSize(QSize(20, 20))
 
         self.setStyleSheet(u"QPushButton {"

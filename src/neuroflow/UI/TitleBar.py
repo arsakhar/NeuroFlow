@@ -1,19 +1,48 @@
-from PyQt5.QtWidgets import QFrame, QSizePolicy, QHBoxLayout, QLabel, QPushButton, QWidget
 from PyQt5 import QtGui
-from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtWidgets import QFrame, QSizePolicy, QHBoxLayout, QLabel, QPushButton, QWidget
 
 from ..Helper.Resources import *
 
-"""
-Creates a custom title bar for main window to use in place of Windows default title bar
-"""
+
 class TitleBar(QWidget):
-    def __init__(self, ui_main):
+    """
+    Custom title bar widget for the main window.
+
+    Parameters:
+    ----------
+    ui_main : QWidget
+        The main UI widget to which this title bar belongs.
+
+    Signals:
+    -------
+    closeClicked : pyqtSignal
+        Signal emitted when the close button is clicked.
+
+    showNormal : pyqtSignal
+        Signal emitted when the resize button is clicked to restore the window.
+
+    showMaximized : pyqtSignal
+        Signal emitted when the resize button is clicked to maximize the window.
+
+    """
+
+    def __init__(self, parent):
+        """
+        Initializes the TitleBar widget.
+
+        Parameters:
+        ----------
+        parent : QWidget
+            The parent widget of the TitleBar.
+
+        """
+
         super().__init__()
 
-        self.ui_main = ui_main
+        self.ui_main = parent
 
         self.initUI()
 
@@ -23,6 +52,11 @@ class TitleBar(QWidget):
         self.minimizeBtn.showMinimized.connect(self.ui_main.showMinimized)
 
     def initUI(self):
+        """
+        Initializes the UI components of the title bar.
+
+        """
+
         self.sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.sizePolicy.setHorizontalStretch(0)
         self.sizePolicy.setVerticalStretch(0)
@@ -94,13 +128,43 @@ class TitleBar(QWidget):
         self.setLayout(self.uiLayout)
 
     def mouseMoveEvent(self, ev):
+        """
+        Handles the mouse move event to enable window dragging.
+
+        Parameters:
+        ----------
+        ev : QMouseEvent
+            The mouse move event.
+
+        """
+
         self.ui_main.moveWindow(ev)
 
 
 class MinimizeButton(QPushButton):
+    """
+    Custom minimize button widget.
+
+    Signals:
+    --------
+    showMinimized : pyqtSignal
+        Signal emitted when the minimize button is clicked.
+
+    """
+
     showMinimized = pyqtSignal()
 
     def __init__(self, parent):
+        """
+        Initializes the MinimizeButton widget.
+
+        Parameters:
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.clicked.connect(self.minimize)
@@ -108,6 +172,11 @@ class MinimizeButton(QPushButton):
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the UI components of the minimize button.
+
+        """
+
         self.setObjectName(u"minimizeBtn")
 
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -142,14 +211,42 @@ class MinimizeButton(QPushButton):
         self.setContentsMargins(0, 0, 0, 0)
 
     def minimize(self):
+        """
+        Emits the showMinimized signal when the button is clicked.
+
+        """
+
         self.showMinimized.emit()
 
 
 class ResizeButton(QPushButton):
+    """
+    Custom resize button widget.
+
+    Signals:
+    --------
+    showNormal : pyqtSignal
+        Signal emitted when the resize button is clicked to restore the window.
+
+    showMaximized : pyqtSignal
+        Signal emitted when the resize button is clicked to maximize the window.
+
+    """
+
     showNormal = pyqtSignal()
     showMaximized = pyqtSignal()
 
     def __init__(self, parent):
+        """
+        Initializes the ResizeButton widget.
+
+        Parameters:
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.clicked.connect(self.resize)
@@ -158,6 +255,11 @@ class ResizeButton(QPushButton):
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the UI components of the resize button.
+
+        """
+
         self.setObjectName(u"maximizeBtn")
 
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -189,6 +291,11 @@ class ResizeButton(QPushButton):
         self.setContentsMargins(0, 0, 0, 0)
 
     def resize(self):
+        """
+        Handles the resize button click event, emitting appropriate signals based on the window state.
+
+        """
+
         if self.maximized:
             self.showNormal.emit()
             self.setToolTip("Maximize")
@@ -203,9 +310,29 @@ class ResizeButton(QPushButton):
 
 
 class CloseButton(QPushButton):
+    """
+    Custom close button widget.
+
+    Signals:
+    --------
+    closeClicked : pyqtSignal
+        Signal emitted when the close button is clicked.
+
+    """
+
     closeClicked = pyqtSignal()
 
     def __init__(self, parent):
+        """
+        Initializes the CloseButton widget.
+
+        Parameters:
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.clicked.connect(self.close)
@@ -213,6 +340,11 @@ class CloseButton(QPushButton):
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the UI components of the close button.
+
+        """
+
         self.setObjectName(u"closeBtn")
 
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -246,16 +378,41 @@ class CloseButton(QPushButton):
         self.setContentsMargins(0, 0, 0, 0)
 
     def close(self):
+        """
+        Emits the closeClicked signal when the button is clicked.
+
+        """
+
         self.closeClicked.emit()
 
 
 class TitleBarLabel(QLabel):
+    """
+    Custom label widget for the title bar.
+
+    """
+
     def __init__(self, parent):
+        """
+        Initializes the TitleBarLabel widget.
+
+        Parameters:
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the UI components of the title bar label.
+
+        """
+
         self.setText("NeuroFlow - Flow Dynamics Software")
         self.setObjectName("titleBarIcon")
         font = QFont()

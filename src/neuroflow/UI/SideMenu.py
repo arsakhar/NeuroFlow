@@ -1,22 +1,47 @@
-from PyQt5.QtWidgets import QFrame, QSizePolicy, QHBoxLayout, QPushButton, QWidget, QVBoxLayout
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QFrame, QSizePolicy, QHBoxLayout, QPushButton, QWidget, QVBoxLayout
 
 from .Logo import Logo
-
 from ..Helper.Resources import resource_path
 
 
-# creates a side menu located on left side of main window
 class SideMenu(QWidget):
+    """
+    Custom side menu widget for the application.
+
+    Parameters:
+    ----------
+    parent : QWidget
+        The parent widget to which this side menu belongs.
+
+    """
+
     HOME_BUTTON = 0
 
     def __init__(self, parent):
+        """
+        Initializes the SideMenu widget.
+
+        Parameters:
+        ----------
+        parent : QWidget
+            The parent widget to which this side menu belongs.
+
+        """
+
         super().__init__()
+
+        self.parent = parent
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the UI components of the side menu.
+
+        """
+
         self.centralFrame = QFrame(self)
 
         self.sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
@@ -62,12 +87,32 @@ class SideMenu(QWidget):
 
 
 class MenuButton(QPushButton):
+    """
+    Custom menu button widget for the side menu.
+
+    """
+
     def __init__(self, parent):
+        """
+        Initializes the MenuButton widget.
+
+        Parameters:
+        ----------
+        parent : QWidget
+            The parent widget.
+
+        """
+
         super().__init__(parent)
 
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the UI components of the menu button.
+
+        """
+
         self.setIconSize(QSize(40, 40))
 
         self.setStyleSheet(u"QPushButton {"
