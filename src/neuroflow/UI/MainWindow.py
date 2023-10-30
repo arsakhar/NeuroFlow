@@ -29,9 +29,9 @@ class MainWindow(QMainWindow):
         No signals are defined in this class.
     """
 
-    # FILE_TREE_VIEW = 0
-    # SERIES_GRAPHICS_VIEW = 1
-    # SERIES_TABLE_VIEW = 2
+    FILE_TREE_VIEW = 0
+    SERIES_GRAPHICS_VIEW = 1
+    SERIES_TABLE_VIEW = 2
 
     def __init__(self):
         super().__init__()

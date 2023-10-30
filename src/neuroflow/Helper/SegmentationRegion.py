@@ -10,3 +10,4 @@ class SegmentationRegion:
         self.mask = None
         self.image = None
         self.measures = None
+        self.prevItemPos = None

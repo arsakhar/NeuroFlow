@@ -112,6 +112,7 @@ class SeriesTableView(QTableView):
 
     def adjustColumnWidths(self):
         proposedColWidth = ((self.frameGeometry().width() - 50) / self.model.columnCount())
+        proposedColWidth = int(proposedColWidth)
 
         for column in range(0, self.model.columnCount()):
             minColWidth = self.sizeHintForColumn(column)

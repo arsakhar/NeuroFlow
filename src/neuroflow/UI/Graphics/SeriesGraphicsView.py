@@ -9,20 +9,50 @@ from pyqtgraph.GraphicsScene import mouseEvents
 from PyQt5.QtWidgets import QFrame, QHBoxLayout
 from itertools import groupby
 
-from src.neuroflow.UI.Graphics.OverlayGraphics import OverlayGraphics
-from src.neuroflow.UI.Stats.ImageStats import ImageStats
-from src.neuroflow.ToolBox.AutoSegmentation import AutoSegmentation
-from src.neuroflow.UI.Cursor import Cursor
-from src.neuroflow.Helper.SegmentationRegion import SegmentationRegion
+from .OverlayGraphics import OverlayGraphics
+from ..Stats.ImageStats import ImageStats
+from ...ToolBox.AutoSegmentation import AutoSegmentation
+from ..Cursor import Cursor
+from ...Helper.SegmentationRegion import SegmentationRegion
 
 
-"""
-Widget that takes a viewbox and image item to display images associated with Series
-"""
 class SeriesGraphicsView(PGImageView):
+    """
+    Custom QGraphicsView for displaying series images and handling overlays and segmentations.
+
+    This class inherits from PGImageView and extends its functionality to handle overlays and segmentations.
+
+    Attributes
+    ----------
+    newSegmentationBundle : pyqtSignal
+       Signal emitted when a new segmentation bundle is generated.
+
+    Parameters
+    ----------
+    parent : QObject
+       The parent QObject for this graphics view.
+
+    toolBar : ToolBar
+       The toolbar object associated with the graphics view.
+
+    """
+
     newSegmentationBundle = pyqtSignal(object)
 
     def __init__(self, parent, toolBar):
+        """
+        Initializes the SeriesGraphicsView object.
+
+        Parameters
+        ----------
+        parent : QObject
+            The parent QObject for this graphics view.
+
+        toolBar : ToolBar
+            The toolbar object associated with the graphics view.
+
+        """
+
         super().__init__(parent=parent, view=ViewBox(), imageItem=ImageItem(toolBar))
 
         self.toolBar = toolBar
@@ -39,6 +69,11 @@ class SeriesGraphicsView(PGImageView):
         self.initUI()
 
     def initUI(self):
+        """
+        Initializes the user interface components and layout.
+
+        """
+
         self.centralFrame = QFrame(self)
         self.centralFrame.setFrameShape(QFrame.NoFrame)
         self.centralFrame.setFrameShadow(QFrame.Raised)
@@ -64,57 +99,71 @@ class SeriesGraphicsView(PGImageView):
 
         self.setLayout(self.centralLayout)
 
-    """
-    Called when new patient is loaded. Calls reset function
-    ================== ===========================================================================
-    **Arguments:**
-    patient            loaded patient
-    ================== ===========================================================================
-    """
     def newPatient(self, patient):
+        """
+        Resets the view when a new patient is selected.
+
+        Parameters
+        ----------
+        patient : object
+            The selected patient object.
+
+        """
+
         self.reset()
 
-    """
-    Clears image item and sets image to None
-    """
     def reset(self):
+        """
+        Resets the view to its initial state.
+
+        """
+
         self.clear()
         self.view.setCursor(self.cursor.DefaultCursor)
         # self.imageStats.disable()
         self.imageItem.lut = self.toolBar.colorMapBtn.colorMap
 
-    """
-    Sets cursor for series viewbox
-    ================== ===========================================================================
-    **Arguments:**
-    activeOverlay      the overlay selected in the toolbar
-    ================== ===========================================================================
-    """
     def setOverlayCursor(self, overlayColor):
+        """
+        Sets the cursor based on the presence of an overlay.
+
+        Parameters
+        ----------
+        overlayColor : str, optional
+            The color of the overlay, None if no overlay is present.
+
+        """
+
         if overlayColor is None:
             self.view.setCursor(self.cursor.DefaultCursor)
 
         else:
             self.view.setCursor(self.cursor.CrossCursor)
 
-    """
-    Sets color map for series images
-    ================== ===========================================================================
-    **Arguments:**
-    lut                lookup table
-    ================== ===========================================================================
-    """
     def setLookupTable(self, lut):
+        """
+        Sets the lookup table for the image.
+
+        Parameters
+        ----------
+        lut : object
+            The lookup table object to be set.
+
+        """
+
         self.imageItem.setLookupTable(lut)
 
-    """
-    Iterates through the image slices at specified rate
-    ================== ===========================================================================
-    **Arguments:**
-    rate               play rate
-    ================== ===========================================================================
-    """
     def play(self, rate):
+        """
+        Plays the series images as a slideshow.
+
+        Parameters
+        ----------
+        rate : int
+            The rate at which images are displayed in milliseconds.
+
+        """
+
         if self.ignorePlay:
             return
 
@@ -131,10 +180,12 @@ class SeriesGraphicsView(PGImageView):
 
         super().play(rate)
 
-    """
-    Checks for completion of play
-    """
     def timeout(self):
+        """
+        Handles the timeout event during the slideshow.
+
+        """
+
         if self.currentIndex == (self.image.shape[0] - 1):
             self.playTimer.stop()
             self.toolBar.playBtn.setPlayState()
@@ -143,14 +194,17 @@ class SeriesGraphicsView(PGImageView):
 
         super().timeout()
 
-    """
-    Displays the images associated with the active series.
-    ================== ===========================================================================
-    **Arguments:**
-    series             the series object
-    ================== ===========================================================================
-    """
     def seriesSelected(self, series):
+        """
+        Handles the selection of a new series.
+
+        Parameters
+        ----------
+        series : object, optional
+            The selected series object, None if no series is selected.
+
+        """
+
         self.reset()
 
         if series is None:
@@ -181,15 +235,17 @@ class SeriesGraphicsView(PGImageView):
 
         self.toolBar.colorMapBtn.colorMap = self.imageItem.lut
 
-    """
-    Updates the imageROI to match the image region specified by the mask. Mask is assumed to be
-    in mask item coordinates.
-    ================== ===========================================================================
-    **Arguments:**
-    mask               the mask
-    ================== ===========================================================================
-    """
     def newMask(self, mask):
+        """
+        Processes a new mask to generate a segmentation bundle.
+
+        Parameters
+        ----------
+        mask : object
+            The mask object containing segmented regions.
+
+        """
+
         self.segmentationBundle = SegmentationBundle()
 
         regions = mask.regions
@@ -238,21 +294,25 @@ class SeriesGraphicsView(PGImageView):
 
         self.newSegmentationBundle.emit(self.segmentationBundle)
 
-    """
-    Changes the overlaid text based on the current image
-    """
     def timeLineChanged(self):
+        """
+        Handles changes in the timeline slider.
+
+        """
+
         super().timeLineChanged()
 
-    """
-    Adjusts the view limits based on the image to display. Prevents zooming out too far.
-    Centers image within the view.
-    ================== ===========================================================================
-    **Arguments:**
-    imageScale         the scale of the image
-    ================== ===========================================================================
-    """
     def setViewScale(self, imageScale):
+        """
+        Sets the scale and limits of the view based on the image dimensions.
+
+        Parameters
+        ----------
+        imageScale : float
+            The scale factor for the image.
+
+        """
+
         self.view.setLimits(xMin=0,
                             xMax=self.imageItem.width() * imageScale,
                             yMin=0,
@@ -284,17 +344,22 @@ class SeriesGraphicsView(PGImageView):
         aspectRatio = self.image.shape[1] / self.image.shape[2]  # width / height ratio
         self.view.setAspectLocked(lock=True, ratio=aspectRatio)
 
-    """
-    Determines the proper image scale based on the viewbox.
-    ================== ===========================================================================
-    **Arguments:**
-    imageData          the ndarray associated with the image
-    
-    **Returns:**
-    imageScale         the image scale
-    ================== ===========================================================================
-    """
     def getImageScale(self, imageData):
+        """
+        Calculates the appropriate image scale based on the view dimensions.
+
+        Parameters
+        ----------
+        imageData : np.ndarray
+            The image data array.
+
+        Returns
+        -------
+        float
+            The calculated image scale factor.
+
+        """
+
         viewWidth = self.view.screenGeometry().width()
         viewHeight = self.view.screenGeometry().height()
 
@@ -308,15 +373,42 @@ class SeriesGraphicsView(PGImageView):
 
 
 class SegmentationBundle:
+    """
+    Bundle class to store segmented regions.
+
+    This class represents a collection of segmented regions. It provides a container to store multiple segmentation
+    regions.
+
+    Attributes
+    ----------
+    regions : list
+        A list to store segmented regions.
+
+    """
+
     def __init__(self):
+        """
+        Initialize an empty SegmentationBundle object.
+
+        """
+
         self.regions = []
 
 
-"""
-The pyqtgraph viewbox. The viewbox displays items.
-"""
 class ViewBox(pg.ViewBox):
+    """
+    Custom view box for displaying interactive graphical data.
+
+    This class extends the functionality of pg.ViewBox to provide additional mouse interactions and cursor changes.
+
+    """
+
     def __init__(self):
+        """
+        Initialize the ViewBox.
+
+        """
+
         super().__init__()
 
         self.cursor = Cursor()
@@ -324,10 +416,28 @@ class ViewBox(pg.ViewBox):
         self.initUI()
 
     def initUI(self):
+        """
+        Initialize the user interface settings for the ViewBox.
+
+        """
+
         self.setAspectLocked(True)
         self.setMouseMode(pg.ViewBox.PanMode)
 
     def mouseDragEvent(self, ev, axis=None):
+        """
+        Handle mouse drag events over the view box.
+
+        Parameters
+        ----------
+        ev : MouseDragEvent
+            The mouse drag event.
+
+        axis : int, optional
+            The axis along which the drag event occurs. Default is None.
+
+        """
+
         if ev.isStart():
             self.setCursor(self.cursor.ClosedHandCursor)
 
@@ -337,33 +447,104 @@ class ViewBox(pg.ViewBox):
         super().mouseDragEvent(ev, axis)
 
     def mouseClickEvent(self, ev):
+        """
+        Handle mouse click events over the view box.
+
+        Parameters
+        ----------
+        ev : object
+            The mouse click event.
+
+        """
+
         if ev.button() == Qt.LeftButton:
             super().mouseClickEvent(ev)
         else:
             return
 
     def wheelEvent(self, ev, axis=None):
+        """
+        Handle wheel events over the view box.
+
+        Parameters
+        ----------
+        ev : object
+            The wheel event.
+
+        axis : int, optional
+            The axis along which the wheel event occurs. Default is None.
+
+        """
+
         super().wheelEvent(ev, axis)
 
     def resizeEvent(self, ev):
+        """
+        Handle resize events for the view box.
+
+        Parameters
+        ----------
+        ev : object
+            The resize event.
+
+        """
+
         super().resizeEvent(ev)
 
 
-"""
-The pyqtgraph image item. An image item stores the images.
-"""
 class ImageItem(pg.ImageItem):
+    """
+    Custom image item for displaying images with additional signals and interactions.
+
+    This class extends the functionality of pg.ImageItem to provide additional signals and interactions.
+
+    Attributes
+    ----------
+    leftMouseDragged : pyqtSignal
+        Signal emitted when the left mouse button is dragged over the image.
+
+    mouseHovered : pyqtSignal
+        Signal emitted when the mouse hovers over the image.
+
+    contextMenuTriggered : pyqtSignal
+        Signal emitted when the context menu is triggered over the image.
+
+    """
+
     leftMouseDragged = pyqtSignal(mouseEvents.MouseDragEvent)
     mouseHovered = pyqtSignal(mouseEvents.HoverEvent)
     contextMenuTriggered = pyqtSignal(object)
 
     def __init__(self, toolBar):
+        """
+        Initialize the ImageItem with the specified toolbar.
+
+        Parameters
+        ----------
+        toolBar : ToolBar
+            The toolbar associated with the ImageItem.
+
+        """
+
         super().__init__()
 
         self.toolBar = toolBar
         self.image = np.zeros((toolBar.width(), toolBar.height(), 3))
 
     def mouseDragEvent(self, ev, axis=None):
+        """
+        Handle mouse drag events over the image.
+
+        Parameters
+        ----------
+        ev : MouseDragEvent
+            The mouse drag event.
+
+        axis : int, optional
+            The axis along which the drag event occurs. Default is None.
+
+        """
+
         if self.toolBar.overlayBtn.overlayColor is None:
             super().mouseDragEvent(ev)
 
@@ -373,6 +554,16 @@ class ImageItem(pg.ImageItem):
             self.leftMouseDragged.emit(ev)
 
     def hoverEvent(self, ev):
+        """
+        Handle mouse hover events over the image.
+
+        Parameters
+        ----------
+        ev : HoverEvent
+            The hover event.
+
+        """
+
         if self.toolBar.overlayBtn.overlayColor is None:
             super().hoverEvent(ev)
 
@@ -384,4 +575,14 @@ class ImageItem(pg.ImageItem):
         ev.acceptDrags(QtCore.Qt.LeftButton)
 
     def contextMenuEvent(self, event):
+        """
+        Handle context menu events over the image.
+
+        Parameters
+        ----------
+        event : object
+            The context menu event.
+
+        """
+
         self.contextMenuTriggered.emit(event)

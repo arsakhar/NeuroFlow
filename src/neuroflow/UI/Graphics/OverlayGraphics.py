@@ -1,22 +1,52 @@
+import math
+
+import cv2
+import numpy as np
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QGraphicsObject, QMenu, QInputDialog, QLineEdit
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QPen
-import math
-import numpy as np
-import cv2
+from PyQt5.QtWidgets import QGraphicsObject, QMenu, QInputDialog, QLineEdit, QGraphicsLineItem
 
-from src.neuroflow.Helper.SegmentationRegion import SegmentationRegion
+from ...Helper.SegmentationRegion import SegmentationRegion
 
 
-"""
-Widget used to draw overlays on image. Must use same viewbox as image widget.
-"""
 class OverlayGraphics(QGraphicsObject):
+    """
+    QGraphicsObject for managing overlay drawing on an image.
+
+    Parameters
+    ----------
+    imageView : QGraphicsView
+        The view where the image is displayed.
+
+    imageItem : QGraphicsPixmapItem
+        The image item to overlay on.
+
+    toolBar : ToolBar
+        The toolbar object for overlay control.
+
+    """
+
     newOverlay = pyqtSignal(object)
     updatedOverlay = pyqtSignal(object)
 
     def __init__(self, imageView, imageItem, toolBar):
+        """
+        Initializes the OverlayGraphics object.
+
+        Parameters
+        ----------
+        imageView : QGraphicsView
+            The view where the image is displayed.
+
+        imageItem : QGraphicsPixmapItem
+            The image item to overlay on.
+
+        toolBar : ToolBar
+            The toolbar object for overlay control.
+
+        """
+
         super().__init__()
         self.imageView = imageView
         self.imageItem = imageItem
@@ -37,21 +67,39 @@ class OverlayGraphics(QGraphicsObject):
         self.toolBar.clearBtn.clicked.connect(self.clear)
 
     def reset(self):
+        """
+        Resets the overlay state by unsubscribing from mouse events and clearing existing overlays.
+
+        """
+
         self.unsubscribe()
         self.clear()
         self.enabled = False
 
     def newPatient(self, patient):
+        """
+        Resets the overlay when a new patient is loaded.
+
+        Parameters
+        ----------
+        patient : Patient
+            The new patient object.
+
+        """
+
         self.reset()
 
-    """
-    Sets the color of the overlay pen.
-    ================== ===========================================================================
-    **Arguments:**
-    overlayColor       hex color
-    ================== ===========================================================================
-    """
     def setOverlay(self, overlayColor):
+        """
+        Sets the color of the overlay pen.
+
+        Parameters
+        ----------
+        overlayColor : str
+            Hex color code.
+
+        """
+
         if overlayColor is None:
             self.enabled = False
             return
@@ -61,14 +109,17 @@ class OverlayGraphics(QGraphicsObject):
         color = QColor(overlayColor)
         self.roiPen.setColor(color)
 
-    """
-    Clears all existing overlays. Called when the active series has changed.
-    ================== ===========================================================================
-    **Arguments:**
-    series             the series object
-    ================== ===========================================================================
-    """
     def seriesSelected(self, series):
+        """
+        Handles series selection event.
+
+        Parameters
+        ----------
+        series : Series
+            The selected series object.
+
+        """
+
         self.reset()
 
         if series is None:
@@ -79,140 +130,120 @@ class OverlayGraphics(QGraphicsObject):
 
         self.subscribe()
 
-    """
-    Enables overlay drawing by subscribing to the viewbox's left mouse drag signal 
-    """
     def subscribe(self):
+        """
+        Enables overlay drawing by subscribing to mouse events.
+
+        """
+
         self.imageItem.leftMouseDragged.connect(self.drawOnMouseDrag)
         self.imageItem.contextMenuTriggered.connect(self.checkROICollision)
 
-    """
-    Enables overlay drawing by subscribing to the viewbox's left mouse drag signal 
-    """
     def unsubscribe(self):
+        """
+        Disables overlay drawing by unsubscribing from mouse events.
+
+        """
+
         self.toolBar.overlayBtn.activeSeg = None
 
         try:
             self.imageItem.leftMouseDragged.disconnect(self.drawOnMouseDrag)
+
         except:
             pass
 
         try:
             self.imageItem.contextMenuTriggered.disconnect(self.checkROICollision)
+
         except:
             pass
 
-    """
-    Draws the overlay while the mouse is being dragged.
-    ================== ===========================================================================
-    **Arguments:**
-    ev                 mouse event
-    ================== ===========================================================================
-    """
     def drawOnMouseDrag(self, ev):
+        """
+        Draws the overlay while the mouse is being dragged.
+
+        Parameters
+        ----------
+        ev : QMouseEvent
+            Mouse event object.
+
+        """
+
         if not self.enabled:
             return
 
         currItemPos = ev.pos()
 
-        # clamp item position to image vertices
+        # Clamp item position to image vertices
         currItemPos = QtCore.QPointF(round(currItemPos.x()), round(currItemPos.y()))
-
-        # get view position
-        currViewPos = self.imageView.mapFromItemToView(self.imageItem, currItemPos)
 
         # if this is the first drag event, clear the regional vertices list
         if ev.isStart():
-            self.prevItemPos = currItemPos
-
             self.region = SegmentationRegion()
             self.region.id = SegmentationRegion.DEFAULT
             self.region.color = self.roiPen.color()
 
-            self.region.vertices.append(self.prevItemPos)
+            self.region.vertices.append(currItemPos)
+            self.region.prevItemPos = currItemPos
 
-        # if this is the last drag event, close the overlay and clear the regional vertices list
+            return
+
         if ev.isFinish():
-            # initialItemPos = self.imageView.mapFromViewToItem(self.imageItem, self.regionVertices[0])
             initialItemPos = self.region.vertices[0]
 
-            self.interpolateSegments(currItemPos, prevItemPos=initialItemPos)
+            self.drawSegment(prevItemPos=initialItemPos, currItemPos=currItemPos)
 
             self.overlay.regions.append(self.region)
 
-            # let's emit our vertice groups in image item (coordinates)
-            self.newOverlay.emit(self.overlay)
+            # Emit overlay
+            # self.newOverlay.emit(self.overlay)
 
-        # no point in adding redundant vertices
-        if currItemPos == self.prevItemPos:
             return
 
-        # no point in adding redundant vertices
-        if self.imageView.mapFromItemToView(self.imageItem, currItemPos) in self.region.vertices[1:]:
-            if self.imageView.mapFromItemToView(self.imageItem, self.prevItemPos) in self.region.vertices[:-1]:
-                self.prevItemPos = currItemPos
+        # Do not add redundant vertices
+        if (currItemPos == self.region.prevItemPos) | (currItemPos in self.region.vertices):
+            return
 
-                return
+        self.drawSegment(prevItemPos=self.region.prevItemPos, currItemPos=currItemPos)
 
-        # let's make sure the distance between consecutive mouse events equal to 1.
-        # this indicates the consecutive mouse events are on the same axis (x or y) allowing
-        # us to create a horizontal or vertical line segment. If the distance between events is not
-        # equal to 1, it means means we'd need to draw a diagonal line. we'd rather have step-wise lines
-        # as diagonal lines don't make sense because you can't create a kernel with a half-filled pixel
-        distance = math.sqrt(
-            (currItemPos.x() - self.prevItemPos.x()) ** 2 +
-            (currItemPos.y() - self.prevItemPos.y()) ** 2)
+        self.region.prevItemPos = currItemPos
 
-        # if distance is not equal to 1, run subroutine to interpolate segments
-        if distance != 1:
-            self.interpolateSegments(currItemPos)
+    def drawSegment(self, currItemPos, prevItemPos):
+        """
+        Draw a segmented line between two points and update the region.
 
-        else:
-            prevViewPos = self.imageView.mapFromItemToView(self.imageItem, self.prevItemPos)
+        Parameters
+        ----------
+        prevItemPos : QPointF
+            Previous mouse position.
 
-            segment = QtGui.QGraphicsLineItem(QtCore.QLineF(prevViewPos, currViewPos))
-            segment.setPen(self.roiPen)
+        currItemPos : QPointF
+            Current mouse position.
 
-            self.imageView.addItem(segment)
+        """
 
-            self.region.vertices.append(currItemPos)
-            self.region.segments.append(segment)
+        num_x_segments = int(abs(currItemPos.x() - prevItemPos.x())) + 1
+        num_y_segments = int(abs(currItemPos.y() - prevItemPos.y())) + 1
 
-        self.prevItemPos = currItemPos
+        num_segments = num_x_segments if num_x_segments > num_y_segments else num_y_segments
 
-    """
-    Subroutine to create stepwise segments when distance between prev and curr mouse position is greater 
-    than 1 pixel.
-    """
-    def interpolateSegments(self, currItemPos, prevItemPos = None):
-        if prevItemPos == None:
-            prevItemPos = self.prevItemPos
-
-        xRange = int(abs(currItemPos.x() - prevItemPos.x())) + 1
-        yRange = int(abs(currItemPos.y() - prevItemPos.y())) + 1
-
-        stepRange = xRange if xRange > yRange else yRange
-
-        # maybe add functionality later to have a consistent slope
-        # xSlope = 1 if xRange > yRange else math.floor(yRange / xRange)
-        # ySlope = 1 if yRange > xRange else math.floor(xRange / yRange)
-
-        xSign = 1 if currItemPos.x() > prevItemPos.x() else -1
-        ySign = 1 if currItemPos.y() > prevItemPos.y() else -1
+        x_segment_direction = 1 if currItemPos.x() > prevItemPos.x() else -1
+        y_segment_directin = 1 if currItemPos.y() > prevItemPos.y() else -1
 
         _currItemPos = prevItemPos
         _currViewPos = self.imageView.mapFromItemToView(self.imageItem, _currItemPos)
 
-        for step in range(1, stepRange):
-            if step == 1:
+        for segment_num in range(1, num_segments):
+            if segment_num == 1:
                 _prevItemPos = prevItemPos
                 _prevViewPos = self.imageView.mapFromItemToView(self.imageItem, _prevItemPos)
 
-            if step < xRange:
-                _currItemPos = QtCore.QPointF((_prevItemPos.x() + xSign), _prevItemPos.y())
+            if segment_num < num_x_segments:
+                _currItemPos = QtCore.QPointF((_prevItemPos.x() + x_segment_direction), _prevItemPos.y())
                 _currViewPos = self.imageView.mapFromItemToView(self.imageItem, _currItemPos)
 
-                segment = QtGui.QGraphicsLineItem(QtCore.QLineF(_prevViewPos, _currViewPos))
+                segment = QGraphicsLineItem(QtCore.QLineF(_prevViewPos, _currViewPos))
                 segment.setPen(self.roiPen)
                 self.imageView.addItem(segment)
                 self.region.vertices.append(_currItemPos)
@@ -221,11 +252,11 @@ class OverlayGraphics(QGraphicsObject):
             _prevItemPos = _currItemPos
             _prevViewPos = self.imageView.mapFromItemToView(self.imageItem, _prevItemPos)
 
-            if step < yRange:
-                _currItemPos = QtCore.QPointF(_currItemPos.x(), (_prevItemPos.y() + ySign))
+            if segment_num < num_y_segments:
+                _currItemPos = QtCore.QPointF(_currItemPos.x(), (_prevItemPos.y() + y_segment_directin))
                 _currViewPos = self.imageView.mapFromItemToView(self.imageItem, _currItemPos)
 
-                segment = QtGui.QGraphicsLineItem(QtCore.QLineF(_prevViewPos, _currViewPos))
+                segment = QGraphicsLineItem(QtCore.QLineF(_prevViewPos, _currViewPos))
                 segment.setPen(self.roiPen)
                 self.imageView.addItem(segment)
                 self.region.vertices.append(_currItemPos)
@@ -234,10 +265,12 @@ class OverlayGraphics(QGraphicsObject):
             _prevItemPos = _currItemPos
             _prevViewPos = self.imageView.mapFromItemToView(self.imageItem, _prevItemPos)
 
-    """
-    Clears all existing overlays.
-    """
     def clear(self):
+        """
+        Clears all existing overlays.
+
+        """
+
         for region in self.overlay.regions:
             if len(region.segments) > 0:
                 for segment in region.segments:
@@ -245,14 +278,17 @@ class OverlayGraphics(QGraphicsObject):
 
         self.overlay = Overlay()
 
-    """
-    Updates the overlay to match the mask.
-    ================== ===========================================================================
-    **Arguments:**
-    mask               mask object containing all independent masks
-    ================== ===========================================================================
-    """
     def newMask(self, mask):
+        """
+        Updates the overlay to match the mask.
+
+        Parameters
+        ----------
+        mask : Mask
+            Mask object containing all independent masks.
+
+        """
+
         self.clear()
 
         for region in mask.regions:
@@ -312,15 +348,25 @@ class OverlayGraphics(QGraphicsObject):
 
             for index, point in enumerate(vertices):
                 if index == 0:
-                    segment = QtGui.QGraphicsLineItem(QtCore.QLineF(vertices[index], vertices[-1]))
+                    segment = QGraphicsLineItem(QtCore.QLineF(vertices[index], vertices[-1]))
                 else:
-                    segment = QtGui.QGraphicsLineItem(QtCore.QLineF(vertices[index], vertices[index - 1]))
+                    segment = QGraphicsLineItem(QtCore.QLineF(vertices[index], vertices[index - 1]))
 
                 segment.setPen(_pen)
                 self.imageView.addItem(segment)
                 region.segments.append(segment)
 
     def checkROICollision(self, ev):
+        """
+        Checks for collision with existing ROIs.
+
+        Parameters
+        ----------
+        ev : QMouseEvent
+            Mouse event object.
+
+        """
+
         if not self.enabled:
             return
 
@@ -345,6 +391,19 @@ class OverlayGraphics(QGraphicsObject):
                 return
 
     def showContextMenu(self, ev, region):
+        """
+        Displays a context menu for selecting ROI options.
+
+        Parameters
+        ----------
+        ev : QMouseEvent
+            Mouse event object.
+
+        region : SegmentationRegion
+            The selected region.
+
+        """
+
         viewPos = self.imageView.mapFromItemToView(self.imageItem, ev.pos())
         scenePos = self.imageView.mapViewToScene(viewPos)
         globalPos = self.imageView.getViewWidget().mapToGlobal(scenePos.toPoint())
@@ -408,11 +467,45 @@ class OverlayGraphics(QGraphicsObject):
 
 
 class Overlay:
+    """
+    Represents an overlay containing multiple regions.
+
+    Attributes
+    ----------
+    regions : list
+        A list to store SegmentationRegion objects representing different regions in the overlay.
+
+    """
+
     def __init__(self):
+        """
+        Initializes an empty overlay with no regions.
+
+        """
+
         self.regions = []
 
 
 class InputDialog(QInputDialog):
+    """
+    Custom input dialog for user interactions.
+
+    This class extends the QInputDialog class to provide a customized input dialog
+    for receiving user input.
+
+    Attributes
+    ----------
+    Inherits attributes from QInputDialog.
+
+    """
+
     def __init__(self):
+        """
+        Initializes the InputDialog object.
+
+        This constructor initializes the custom input dialog object, inheriting
+        attributes and methods from the QInputDialog class.
+
+        """
         super().__init__()
 
