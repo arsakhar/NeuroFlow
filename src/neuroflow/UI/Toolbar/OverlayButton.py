@@ -18,6 +18,7 @@ class OverlayButton(QToolButton):
         self.overlayColor = None
 
         self.initUI()
+        self.is_pressed = False  # Track button state
 
         self.popup.palette.selected.connect(self.overlayUpdated)
 
@@ -36,7 +37,20 @@ class OverlayButton(QToolButton):
 
     def overlayUpdated(self, color):
         self.overlayColor = color
+
         self.overlaySelected.emit(color)
+
+    def mousePressEvent(self, event):
+        self.is_pressed = not self.is_pressed
+
+        if self.is_pressed:
+            super().mousePressEvent(event)
+
+            self.setDown(True)
+
+        else:
+            self.setDown(False)
+            self.overlayUpdated(None)
 
 
 class Action(QWidgetAction):

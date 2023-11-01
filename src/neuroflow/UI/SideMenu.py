@@ -18,6 +18,7 @@ class SideMenu(QWidget):
     """
 
     HOME_BUTTON = 0
+    SETTINGS_BUTTON = 1
 
     def __init__(self, parent):
         """
@@ -71,13 +72,17 @@ class SideMenu(QWidget):
         self.homeBtn = MenuButton(self.btnsFrame)
         self.homeBtn.setIcon(QIcon(resource_path("icons/24x24/cil-home")))
 
+        self.settingsBtn = MenuButton(self.btnsFrame)
+        self.settingsBtn.setIcon(QIcon(resource_path("icons/24x24/cil-settings")))
+
         self.btnsLayout = QVBoxLayout(self.btnsFrame)
         self.btnsLayout.addWidget(self.homeBtn, alignment=Qt.AlignTop)
+        self.btnsLayout.addWidget(self.settingsBtn, alignment=Qt.AlignTop)
 
         self.centralLayout = QVBoxLayout(self.centralFrame)
         self.centralLayout.setContentsMargins(0, 0, 0, 0)
         self.centralLayout.addWidget(self.logoFrame, stretch=1, alignment=Qt.AlignTop)
-        self.centralLayout.addWidget(self.btnsFrame, stretch=4)
+        self.centralLayout.addWidget(self.btnsFrame, stretch=10, alignment=Qt.AlignTop)
 
         self.uiLayout = QHBoxLayout(self)
         self.uiLayout.addWidget(self.centralFrame)

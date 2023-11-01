@@ -11,6 +11,7 @@ from .StatusBar import StatusBar
 from .Tables.FlowTableView import FlowTableView
 from .Tables.PatientTableView import PatientTableView
 from .Tables.SeriesTableView import SeriesTableView
+from .Settings import Settings
 from .TitleBar import TitleBar
 from .Toolbar.Toolbar import Toolbar
 from ..Helper.Resources import *
@@ -69,9 +70,12 @@ class MainWindow(QMainWindow):
         # Instantiate Flow Graphics
         self.flowGraphicsView = FlowGraphicsView(self, self.toolBar)
 
+        self.settings = Settings(self)
+
         self.initUI()
 
         self.sideMenu.homeBtn.clicked.connect(lambda: self.contentLayout.setCurrentIndex(self.sideMenu.HOME_BUTTON))
+        self.sideMenu.settingsBtn.clicked.connect(lambda: self.contentLayout.setCurrentIndex(self.sideMenu.SETTINGS_BUTTON))
 
     def initUI(self):
         self.setWindowIcon(QtGui.QIcon(resource_path('icons/logo.png')))
@@ -103,6 +107,11 @@ class MainWindow(QMainWindow):
         self.homeFrame.setFrameShape(QFrame.NoFrame)
         self.homeFrame.setFrameShadow(QFrame.Raised)
         self.homeFrame.setContentsMargins(0, 0, 0, 0)
+
+        self.settingsFrame = QFrame(self.contentFrame)
+        self.settingsFrame.setFrameShape(QFrame.NoFrame)
+        self.settingsFrame.setFrameShadow(QFrame.Raised)
+        self.settingsFrame.setContentsMargins(0, 0, 0, 0)
 
         self.graphicsFrame = QFrame(self.homeFrame)
         self.graphicsFrame.setFrameShape(QFrame.NoFrame)
@@ -203,8 +212,14 @@ class MainWindow(QMainWindow):
         self.homeLayout.addWidget(self.tableFrame, stretch=1)
         self.homeLayout.setContentsMargins(0, 0, 0, 0)
 
+        # Create vertical layout (graphics at top, table at bottom)
+        self.settingsLayout = QVBoxLayout(self.settingsFrame)
+        self.settingsLayout.addWidget(self.settings)
+        self.settingsLayout.setContentsMargins(0, 0, 0, 0)
+
         self.contentLayout = QStackedLayout(self.contentFrame)
         self.contentLayout.addWidget(self.homeFrame)
+        self.contentLayout.addWidget(self.settingsFrame)
         self.contentLayout.setContentsMargins(0, 0, 0, 0)
         self.contentLayout.setCurrentIndex(0)
 

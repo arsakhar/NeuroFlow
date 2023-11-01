@@ -215,9 +215,7 @@ class MaskGraphicsView(PGGraphicsView):
         self.mask = Mask()
 
         for region in overlay.regions:
-            regionVertices = region.vertices
-
-            regionCoordinates = [tuple([vertice.x(), vertice.y()]) for vertice in regionVertices]
+            regionCoordinates = [(coordinate.x(), coordinate.y()) for coordinate in region.vertices]
             regionMask = Image.new('L', imageShape)
 
             ImageDraw.Draw(regionMask).polygon(regionCoordinates, outline=1, fill=1)

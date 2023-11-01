@@ -6,6 +6,7 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QPen
 from PyQt5.QtWidgets import QGraphicsObject, QMenu, QInputDialog, QLineEdit, QGraphicsLineItem
+from shapely.geometry import Polygon, Point
 
 from ...Helper.SegmentationRegion import SegmentationRegion
 
@@ -178,9 +179,9 @@ class OverlayGraphics(QGraphicsObject):
         # Clamp item position to image vertices
         currItemPos = QtCore.QPointF(round(currItemPos.x()), round(currItemPos.y()))
 
-        # if this is the first drag event, clear the regional vertices list
         if ev.isStart():
             self.region = SegmentationRegion()
+            self.region.polygon = Polygon()
             self.region.id = SegmentationRegion.DEFAULT
             self.region.color = self.roiPen.color()
 
@@ -192,12 +193,12 @@ class OverlayGraphics(QGraphicsObject):
         if ev.isFinish():
             initialItemPos = self.region.vertices[0]
 
-            self.drawSegment(prevItemPos=initialItemPos, currItemPos=currItemPos)
+            self.drawSegment(startItemPos=initialItemPos, endItemPos=currItemPos)
 
             self.overlay.regions.append(self.region)
 
             # Emit overlay
-            # self.newOverlay.emit(self.overlay)
+            self.newOverlay.emit(self.overlay)
 
             return
 
@@ -205,65 +206,63 @@ class OverlayGraphics(QGraphicsObject):
         if (currItemPos == self.region.prevItemPos) | (currItemPos in self.region.vertices):
             return
 
-        self.drawSegment(prevItemPos=self.region.prevItemPos, currItemPos=currItemPos)
+        self.drawSegment(startItemPos=self.region.prevItemPos, endItemPos=currItemPos)
 
         self.region.prevItemPos = currItemPos
 
-    def drawSegment(self, currItemPos, prevItemPos):
+    def drawSegment(self, startItemPos, endItemPos):
         """
         Draw a segmented line between two points and update the region.
 
         Parameters
         ----------
-        prevItemPos : QPointF
-            Previous mouse position.
+        startItemPos : QPointF
+            Starting mouse position.
 
-        currItemPos : QPointF
-            Current mouse position.
+        endItemPos : QPointF
+            Ending mouse position.
 
         """
 
-        num_x_segments = int(abs(currItemPos.x() - prevItemPos.x())) + 1
-        num_y_segments = int(abs(currItemPos.y() - prevItemPos.y())) + 1
+        num_x_segments = int(abs(endItemPos.x() - startItemPos.x()))
+        num_y_segments = int(abs(endItemPos.y() - startItemPos.y()))
 
         num_segments = num_x_segments if num_x_segments > num_y_segments else num_y_segments
 
-        x_segment_direction = 1 if currItemPos.x() > prevItemPos.x() else -1
-        y_segment_directin = 1 if currItemPos.y() > prevItemPos.y() else -1
+        x_segment_direction = 1 if endItemPos.x() > startItemPos.x() else -1
+        y_segment_direction = 1 if endItemPos.y() > startItemPos.y() else -1
 
-        _currItemPos = prevItemPos
-        _currViewPos = self.imageView.mapFromItemToView(self.imageItem, _currItemPos)
+        currItemPos = startItemPos
 
-        for segment_num in range(1, num_segments):
-            if segment_num == 1:
-                _prevItemPos = prevItemPos
-                _prevViewPos = self.imageView.mapFromItemToView(self.imageItem, _prevItemPos)
+        prevItemPos = startItemPos
+        prevViewPos = self.imageView.mapFromItemToView(self.imageItem, prevItemPos)
 
-            if segment_num < num_x_segments:
-                _currItemPos = QtCore.QPointF((_prevItemPos.x() + x_segment_direction), _prevItemPos.y())
-                _currViewPos = self.imageView.mapFromItemToView(self.imageItem, _currItemPos)
+        for segment_num in range(1, num_segments + 1):
+            if segment_num <= num_x_segments:
+                currItemPos = QtCore.QPointF((prevItemPos.x() + x_segment_direction), prevItemPos.y())
+                currViewPos = self.imageView.mapFromItemToView(self.imageItem, currItemPos)
 
-                segment = QGraphicsLineItem(QtCore.QLineF(_prevViewPos, _currViewPos))
+                segment = QGraphicsLineItem(QtCore.QLineF(prevViewPos, currViewPos))
                 segment.setPen(self.roiPen)
                 self.imageView.addItem(segment)
-                self.region.vertices.append(_currItemPos)
+                self.region.vertices.append(currItemPos)
                 self.region.segments.append(segment)
 
-            _prevItemPos = _currItemPos
-            _prevViewPos = self.imageView.mapFromItemToView(self.imageItem, _prevItemPos)
+            prevItemPos = currItemPos
+            prevViewPos = self.imageView.mapFromItemToView(self.imageItem, prevItemPos)
 
-            if segment_num < num_y_segments:
-                _currItemPos = QtCore.QPointF(_currItemPos.x(), (_prevItemPos.y() + y_segment_directin))
-                _currViewPos = self.imageView.mapFromItemToView(self.imageItem, _currItemPos)
+            if segment_num <= num_y_segments:
+                currItemPos = QtCore.QPointF(currItemPos.x(), (prevItemPos.y() + y_segment_direction))
+                currViewPos = self.imageView.mapFromItemToView(self.imageItem, currItemPos)
 
-                segment = QGraphicsLineItem(QtCore.QLineF(_prevViewPos, _currViewPos))
+                segment = QGraphicsLineItem(QtCore.QLineF(prevViewPos, currViewPos))
                 segment.setPen(self.roiPen)
                 self.imageView.addItem(segment)
-                self.region.vertices.append(_currItemPos)
+                self.region.vertices.append(currItemPos)
                 self.region.segments.append(segment)
 
-            _prevItemPos = _currItemPos
-            _prevViewPos = self.imageView.mapFromItemToView(self.imageItem, _prevItemPos)
+            prevItemPos = currItemPos
+            prevViewPos = self.imageView.mapFromItemToView(self.imageItem, prevItemPos)
 
     def clear(self):
         """
