@@ -25,7 +25,7 @@ class OverlayButton(QToolButton):
     def initUI(self):
         self.popup = Action(self)
         self.addAction(self.popup)
-
+        self.setToolTip("Select Overlay")
         self.setPopupMode(QToolButton.InstantPopup)
 
         self.noneIconGraphic = QIcon(resource_path("icons/24x24/cil-pencil.png"))

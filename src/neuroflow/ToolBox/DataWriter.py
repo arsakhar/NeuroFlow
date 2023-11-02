@@ -24,7 +24,7 @@ class DataWriter():
         self.saveDir = None
         self.filePrefix = None
 
-        self.toolBar.saveBtn.clicked.connect(self.saveAll)
+        # self.toolBar.saveBtn.clicked.connect(self.saveAll)
         self.toolBar.clearBtn.clicked.connect(lambda: self.toolBar.saveBtn.setDisabled(True))
         self.toolBar.clearBtn.clicked.connect(lambda: self.toolBar.saveTxtBox.setDisabled(True))
 
@@ -36,8 +36,9 @@ class DataWriter():
     ================== ===========================================================================
     """
     def newSegmentationBundle(self, segmentationBundle):
-        self.toolBar.saveBtn.setDisabled(False)
-        self.toolBar.saveTxtBox.setDisabled(False)
+        # self.toolBar.saveBtn.setDisabled(False)
+        # self.toolBar.saveTxtBox.setDisabled(False)
+        pass
 
     """
     Saves flow plot and data, pixel intensity, velocity matrix, and viewbox for current image.

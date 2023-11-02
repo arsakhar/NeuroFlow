@@ -17,6 +17,7 @@ class KernelButton(QToolButton):
         self.kernelSize = 1
 
         self.initUI()
+        self.is_pressed = False  # Track button state
 
         self.popup.kernel.valueChanged.connect(self.kernelUpdated)
 
@@ -39,6 +40,18 @@ class KernelButton(QToolButton):
             self.kernelSize = kernelSize
 
         self.kernelSelected.emit(kernelSize)
+
+    def mousePressEvent(self, event):
+        self.is_pressed = not self.is_pressed
+
+        if self.is_pressed:
+            super().mousePressEvent(event)
+
+            self.setDown(True)
+
+        else:
+            self.setDown(False)
+            self.kernelUpdated(0)
 
 
 class Action(QWidgetAction):

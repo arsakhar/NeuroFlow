@@ -100,17 +100,17 @@ class Toolbar(QWidget):
         self.imageFrame.setContentsMargins(5, 0, 0, 0)
         self.imageFrame.setStyleSheet("border: none;")
 
-        self.imageLabelFrame = QFrame(self.imageFrame)
-        self.imageLabelFrame.setFrameShape(QFrame.NoFrame)
-        self.imageLabelFrame.setFrameShadow(QFrame.Raised)
-        self.imageLabelFrame.setContentsMargins(0, 0, 0, 0)
-
-        self.imageLabel = Label(self.imageLabelFrame)
-        self.imageLabel.setText("SERIES")
-
-        self.imageLabelLayout = QHBoxLayout(self.imageLabelFrame)
-        self.imageLabelLayout.setContentsMargins(0, 0, 0, 0)
-        self.imageLabelLayout.addWidget(self.imageLabel)
+        # self.imageLabelFrame = QFrame(self.imageFrame)
+        # self.imageLabelFrame.setFrameShape(QFrame.NoFrame)
+        # self.imageLabelFrame.setFrameShadow(QFrame.Raised)
+        # self.imageLabelFrame.setContentsMargins(0, 0, 0, 0)
+        #
+        # self.imageLabel = Label(self.imageLabelFrame)
+        # self.imageLabel.setText("SERIES")
+        #
+        # self.imageLabelLayout = QHBoxLayout(self.imageLabelFrame)
+        # self.imageLabelLayout.setContentsMargins(0, 0, 0, 0)
+        # self.imageLabelLayout.addWidget(self.imageLabel)
 
         self.imageBtnsFrame = QFrame(self.imageFrame)
         self.imageBtnsFrame.setFrameShape(QFrame.NoFrame)
@@ -129,132 +129,144 @@ class Toolbar(QWidget):
         self.overlayBtn.setIconSize(QSize(30, 30))
         self.setButtonStyleSheet(self.overlayBtn)
 
-        self.autoSegBtn = AutoSegmentationButton(self.imageBtnsFrame)
-        self.autoSegBtn.setIconSize(QSize(30, 30))
-        self.setButtonStyleSheet(self.autoSegBtn)
+        # self.autoSegBtn = AutoSegmentationButton(self.imageBtnsFrame)
+        # self.autoSegBtn.setIconSize(QSize(30, 30))
+        # self.setButtonStyleSheet(self.autoSegBtn)
 
         self.clearBtn = ClearButton(self.imageBtnsFrame)
         self.clearBtn.setIconSize(QSize(30, 30))
         self.setButtonStyleSheet(self.clearBtn)
+
+        self.kernelBtn = KernelButton(self.imageBtnsFrame)
+        self.kernelBtn.setIconSize(QSize(30, 30))
+        self.kernelBtn.setToolTip("Draw on Mask")
+        self.setButtonStyleSheet(self.kernelBtn)
+
+        self.saveBtn = SaveButton(self.imageBtnsFrame)
+        self.saveBtn.setIconSize(QSize(30, 30))
+        self.saveBtn.setToolTip("Save Output")
+        self.setButtonStyleSheet(self.saveBtn)
 
         self.imageBtnsLayout = QHBoxLayout(self.imageBtnsFrame)
         self.imageBtnsLayout.setContentsMargins(0, 0, 0, 0)
         self.imageBtnsLayout.addWidget(self.playBtn)
         self.imageBtnsLayout.addWidget(self.colorMapBtn)
         self.imageBtnsLayout.addWidget(self.overlayBtn)
-        self.imageBtnsLayout.addWidget(self.autoSegBtn)
+        # self.imageBtnsLayout.addWidget(self.autoSegBtn)
         self.imageBtnsLayout.addWidget(self.clearBtn)
+        self.imageBtnsLayout.addWidget(self.kernelBtn)
+        self.imageBtnsLayout.addWidget(self.saveBtn)
 
         self.imageLayout = QHBoxLayout(self.imageFrame)
         self.imageLayout.setContentsMargins(0, 0, 0, 0)
-        self.imageLayout.addWidget(self.imageLabelFrame)
+        # self.imageLayout.addWidget(self.imageLabelFrame)
         self.imageLayout.addWidget(self.imageBtnsFrame)
 
-        self.separator1Frame = QFrame(self.centralFrame)
-        self.separator1Frame.setFrameShape(QFrame.VLine)
-        self.separator1Frame.setFixedWidth(1)
+        # self.separator1Frame = QFrame(self.centralFrame)
+        # self.separator1Frame.setFrameShape(QFrame.VLine)
+        # self.separator1Frame.setFixedWidth(1)
+        #
+        # self.separator1Layout = QHBoxLayout(self.separator1Frame)
 
-        self.separator1Layout = QHBoxLayout(self.separator1Frame)
+        # self.maskFrame = QFrame(self.centralFrame)
+        # self.maskFrame.setFrameShape(QFrame.NoFrame)
+        # self.maskFrame.setFrameShadow(QFrame.Raised)
+        # self.maskFrame.setContentsMargins(0, 0, 0, 0)
+        # self.maskFrame.setStyleSheet("border: none;")
+        #
+        # self.maskLabelFrame = QFrame(self.maskFrame)
+        # self.maskLabelFrame.setFrameShape(QFrame.NoFrame)
+        # self.maskLabelFrame.setFrameShadow(QFrame.Raised)
+        # self.maskLabelFrame.setContentsMargins(0, 0, 0, 0)
 
-        self.maskFrame = QFrame(self.centralFrame)
-        self.maskFrame.setFrameShape(QFrame.NoFrame)
-        self.maskFrame.setFrameShadow(QFrame.Raised)
-        self.maskFrame.setContentsMargins(0, 0, 0, 0)
-        self.maskFrame.setStyleSheet("border: none;")
+        # self.maskLabel = Label(self.maskLabelFrame)
+        # self.maskLabel.setText("MASK")
+        #
+        # self.maskLabelLayout = QHBoxLayout(self.maskLabelFrame)
+        # self.maskLabelLayout.addWidget(self.maskLabel)
+        # self.maskLabelLayout.setContentsMargins(0, 0, 0, 0)
 
-        self.maskLabelFrame = QFrame(self.maskFrame)
-        self.maskLabelFrame.setFrameShape(QFrame.NoFrame)
-        self.maskLabelFrame.setFrameShadow(QFrame.Raised)
-        self.maskLabelFrame.setContentsMargins(0, 0, 0, 0)
+        # self.maskBtnsFrame = QFrame(self.maskFrame)
+        # self.maskBtnsFrame.setFrameShape(QFrame.NoFrame)
+        # self.maskBtnsFrame.setFrameShadow(QFrame.Raised)
+        # self.maskBtnsFrame.setContentsMargins(0, 0, 0, 0)
 
-        self.maskLabel = Label(self.maskLabelFrame)
-        self.maskLabel.setText("MASK")
+        # self.kernelBtn = KernelButton(self.maskBtnsFrame)
+        # self.kernelBtn.setIconSize(QSize(30, 30))
+        # self.kernelBtn.setToolTip("Draw on Mask")
+        # self.setButtonStyleSheet(self.kernelBtn)
 
-        self.maskLabelLayout = QHBoxLayout(self.maskLabelFrame)
-        self.maskLabelLayout.addWidget(self.maskLabel)
-        self.maskLabelLayout.setContentsMargins(0, 0, 0, 0)
+        # self.maskBtnsLayout = QHBoxLayout(self.maskBtnsFrame)
+        # self.maskBtnsLayout.addWidget(self.kernelBtn)
+        # self.maskBtnsLayout.setContentsMargins(0, 0, 0, 0)
 
-        self.maskBtnsFrame = QFrame(self.maskFrame)
-        self.maskBtnsFrame.setFrameShape(QFrame.NoFrame)
-        self.maskBtnsFrame.setFrameShadow(QFrame.Raised)
-        self.maskBtnsFrame.setContentsMargins(0, 0, 0, 0)
+        # self.maskLayout = QHBoxLayout(self.maskFrame)
+        # self.maskLayout.setContentsMargins(0, 0, 0, 0)
+        # self.maskLayout.addWidget(self.maskLabelFrame)
+        # self.maskLayout.addWidget(self.maskBtnsFrame)
 
-        self.kernelBtn = KernelButton(self.maskBtnsFrame)
-        self.kernelBtn.setIconSize(QSize(30, 30))
-        self.kernelBtn.setToolTip("Draw on Mask")
-        self.setButtonStyleSheet(self.kernelBtn)
+        # self.separator2Frame = QFrame(self.centralFrame)
+        # self.separator2Frame.setFrameShape(QFrame.VLine)
+        # self.separator2Frame.setFixedWidth(1)
+        #
+        # self.separator2Layout = QHBoxLayout(self.separator2Frame)
 
-        self.maskBtnsLayout = QHBoxLayout(self.maskBtnsFrame)
-        self.maskBtnsLayout.addWidget(self.kernelBtn)
-        self.maskBtnsLayout.setContentsMargins(0, 0, 0, 0)
-
-        self.maskLayout = QHBoxLayout(self.maskFrame)
-        self.maskLayout.setContentsMargins(0, 0, 0, 0)
-        self.maskLayout.addWidget(self.maskLabelFrame)
-        self.maskLayout.addWidget(self.maskBtnsFrame)
-
-        self.separator2Frame = QFrame(self.centralFrame)
-        self.separator2Frame.setFrameShape(QFrame.VLine)
-        self.separator2Frame.setFixedWidth(1)
-
-        self.separator2Layout = QHBoxLayout(self.separator2Frame)
-
-        self.analysisFrame = QFrame(self.centralFrame)
-        self.analysisFrame.setFrameShape(QFrame.NoFrame)
-        self.analysisFrame.setFrameShadow(QFrame.Raised)
-        self.analysisFrame.setContentsMargins(0, 0, 0, 0)
-        self.analysisFrame.setStyleSheet("border: none;")
-
-        self.analysisLabelFrame = QFrame(self.analysisFrame)
-        self.analysisLabelFrame.setFrameShape(QFrame.NoFrame)
-        self.analysisLabelFrame.setFrameShadow(QFrame.Raised)
-        self.analysisLabelFrame.setContentsMargins(0, 0, 0, 0)
-
-        self.analysisLabel = Label(self.analysisLabelFrame)
-        self.analysisLabel.setText("ANALYSIS")
-
-        self.analysisLabelLayout = QHBoxLayout(self.analysisLabelFrame)
-        self.analysisLabelLayout.setContentsMargins(0, 0, 0, 0)
-        self.analysisLabelLayout.addWidget(self.analysisLabel)
-
-        self.analysisBtnsFrame = QFrame(self.analysisFrame)
-        self.analysisBtnsFrame.setFrameShape(QFrame.NoFrame)
-        self.analysisBtnsFrame.setFrameShadow(QFrame.Raised)
-        self.analysisBtnsFrame.setContentsMargins(0, 0, 0, 0)
-
-        self.saveBtn = SaveButton(self.analysisBtnsFrame)
-        self.saveBtn.setIconSize(QSize(30, 30))
-        self.saveBtn.setToolTip("Save Output")
-        self.setButtonStyleSheet(self.saveBtn)
-
-        self.analysisBtnsLayout = QHBoxLayout(self.analysisBtnsFrame)
-        self.analysisBtnsLayout.addWidget(self.saveBtn)
-        self.analysisBtnsLayout.setContentsMargins(0, 0, 0, 0)
-
-        self.analysisTxtBoxFrame = QFrame(self.analysisFrame)
-        self.analysisTxtBoxFrame.setFrameShape(QFrame.NoFrame)
-        self.analysisTxtBoxFrame.setFrameShadow(QFrame.Raised)
-        self.analysisTxtBoxFrame.setContentsMargins(0, 0, 0, 0)
-
-        self.saveTxtBox = SaveTextBox(self.analysisTxtBoxFrame)
-        self.saveTxtBox.setFixedSize(150, 25)
-
-        self.analysisTxtBoxLayout = QHBoxLayout(self.analysisTxtBoxFrame)
-        self.analysisTxtBoxLayout.addWidget(self.saveTxtBox)
-        self.analysisTxtBoxLayout.setContentsMargins(0, 0, 0, 0)
-
-        self.analysisLayout = QHBoxLayout(self.analysisFrame)
-        self.analysisLayout.setContentsMargins(0, 0, 0, 0)
-        self.analysisLayout.addWidget(self.analysisLabelFrame)
-        self.analysisLayout.addWidget(self.analysisTxtBoxFrame)
-        self.analysisLayout.addWidget(self.analysisBtnsFrame)
+        # self.analysisFrame = QFrame(self.centralFrame)
+        # self.analysisFrame.setFrameShape(QFrame.NoFrame)
+        # self.analysisFrame.setFrameShadow(QFrame.Raised)
+        # self.analysisFrame.setContentsMargins(0, 0, 0, 0)
+        # self.analysisFrame.setStyleSheet("border: none;")
+        #
+        # self.analysisLabelFrame = QFrame(self.analysisFrame)
+        # self.analysisLabelFrame.setFrameShape(QFrame.NoFrame)
+        # self.analysisLabelFrame.setFrameShadow(QFrame.Raised)
+        # self.analysisLabelFrame.setContentsMargins(0, 0, 0, 0)
+        #
+        # self.analysisLabel = Label(self.analysisLabelFrame)
+        # self.analysisLabel.setText("ANALYSIS")
+        #
+        # self.analysisLabelLayout = QHBoxLayout(self.analysisLabelFrame)
+        # self.analysisLabelLayout.setContentsMargins(0, 0, 0, 0)
+        # self.analysisLabelLayout.addWidget(self.analysisLabel)
+        #
+        # self.analysisBtnsFrame = QFrame(self.analysisFrame)
+        # self.analysisBtnsFrame.setFrameShape(QFrame.NoFrame)
+        # self.analysisBtnsFrame.setFrameShadow(QFrame.Raised)
+        # self.analysisBtnsFrame.setContentsMargins(0, 0, 0, 0)
+        #
+        # self.saveBtn = SaveButton(self.analysisBtnsFrame)
+        # self.saveBtn.setIconSize(QSize(30, 30))
+        # self.saveBtn.setToolTip("Save Output")
+        # self.setButtonStyleSheet(self.saveBtn)
+        #
+        # self.analysisBtnsLayout = QHBoxLayout(self.analysisBtnsFrame)
+        # self.analysisBtnsLayout.addWidget(self.saveBtn)
+        # self.analysisBtnsLayout.setContentsMargins(0, 0, 0, 0)
+        #
+        # self.analysisTxtBoxFrame = QFrame(self.analysisFrame)
+        # self.analysisTxtBoxFrame.setFrameShape(QFrame.NoFrame)
+        # self.analysisTxtBoxFrame.setFrameShadow(QFrame.Raised)
+        # self.analysisTxtBoxFrame.setContentsMargins(0, 0, 0, 0)
+        #
+        # self.saveTxtBox = SaveTextBox(self.analysisTxtBoxFrame)
+        # self.saveTxtBox.setFixedSize(150, 25)
+        #
+        # self.analysisTxtBoxLayout = QHBoxLayout(self.analysisTxtBoxFrame)
+        # self.analysisTxtBoxLayout.addWidget(self.saveTxtBox)
+        # self.analysisTxtBoxLayout.setContentsMargins(0, 0, 0, 0)
+        #
+        # self.analysisLayout = QHBoxLayout(self.analysisFrame)
+        # self.analysisLayout.setContentsMargins(0, 0, 0, 0)
+        # self.analysisLayout.addWidget(self.analysisLabelFrame)
+        # self.analysisLayout.addWidget(self.analysisTxtBoxFrame)
+        # self.analysisLayout.addWidget(self.analysisBtnsFrame)
 
         self.centralLayout = QHBoxLayout(self.centralFrame)
         self.centralLayout.addWidget(self.imageFrame)
-        self.centralLayout.addWidget(self.separator1Frame)
-        self.centralLayout.addWidget(self.maskFrame)
-        self.centralLayout.addWidget(self.separator2Frame)
-        self.centralLayout.addWidget(self.analysisFrame)
+        # self.centralLayout.addWidget(self.separator1Frame)
+        # self.centralLayout.addWidget(self.maskFrame)
+        # self.centralLayout.addWidget(self.separator2Frame)
+        # self.centralLayout.addWidget(self.analysisFrame)
         self.centralLayout.setContentsMargins(0, 0, 0, 0)
         self.centralLayout.setAlignment(Qt.AlignLeft)
         self.centralLayout.setSpacing(10)
@@ -297,7 +309,7 @@ class Toolbar(QWidget):
         else:
             self.setDisabled(False)
 
-        self.saveTxtBox.setDefaultText()
+        # self.saveTxtBox.setDefaultText()
 
     def setButtonStyleSheet(self, toolBtn):
         """

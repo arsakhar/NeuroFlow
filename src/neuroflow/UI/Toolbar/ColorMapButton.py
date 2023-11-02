@@ -24,7 +24,7 @@ class ColorMapButton(QToolButton):
     def initUI(self):
         self.popup = Action(self)
         self.addAction(self.popup)
-
+        self.setToolTip("Select Color Map")
         self.setPopupMode(QToolButton.InstantPopup)
 
         self.noneIconGraphic = QIcon(resource_path("icons/colormap.png"))

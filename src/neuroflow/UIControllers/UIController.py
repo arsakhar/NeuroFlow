@@ -61,8 +61,10 @@ class UIController:
         self.ui_patientTableView.seriesSelected.connect(self.ui_flowTableView.seriesSelected)
 
     def linkSeriesMaskViews(self):
-        self.ui_seriesGraphicsView.view.setXLink(self.ui_maskGraphicsView.view)
-        self.ui_seriesGraphicsView.view.setYLink(self.ui_maskGraphicsView.view)
+        self.ui_maskGraphicsView.view.setXLink(self.ui_seriesGraphicsView.view)
+        self.ui_maskGraphicsView.view.setYLink(self.ui_seriesGraphicsView.view)
+        # self.ui_seriesGraphicsView.view.setXLink(self.ui_maskGraphicsView.view)
+        # self.ui_seriesGraphicsView.view.setYLink(self.ui_maskGraphicsView.view)
         self.overlay.newOverlay.connect(self.ui_maskGraphicsView.newOverlay)
         self.autoSeg.newAutoSeg.connect(self.ui_maskGraphicsView.newAutoSeg)
         self.ui_maskGraphicsView.newMask.connect(self.overlay.newMask)

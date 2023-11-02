@@ -20,7 +20,7 @@ class AutoSegmentation(QGraphicsObject):
         self.imageItem = seriesGraphics.imageItem
 
         self.toolBar = toolBar
-        self.toolBar.autoSegBtn.autoSegSelected.connect(self.runAutoSeg)
+        # self.toolBar.autoSegBtn.autoSegSelected.connect(self.runAutoSeg)
 
     """
     Runs auto segmentation routine

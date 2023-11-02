@@ -6,9 +6,9 @@ from PyQt5.QtWidgets import QFrame, QHBoxLayout
 from pyqtgraph import GraphicsView as PGGraphicsView
 from pyqtgraph.GraphicsScene import mouseEvents
 
-from src.neuroflow.Helper.SegmentationRegion import SegmentationRegion
-from src.neuroflow.UI.Cursor import Cursor
-from src.neuroflow.UI.Graphics.KernelGraphics import KernelGraphics
+from ...Helper.SegmentationRegion import SegmentationRegion
+from ...UI.Cursor import Cursor
+from ...UI.Graphics.KernelGraphics import KernelGraphics
 
 
 class MaskGraphicsView(PGGraphicsView):
@@ -329,13 +329,34 @@ class ViewBox(pg.ViewBox):
     def __init__(self, parent):
         super().__init__()
 
+        self.cursor = Cursor()
+
         self.graphicsWidget = parent
 
     def initUI(self):
         self.setMouseEnabled(True)
 
     def mouseDragEvent(self, ev, axis=None):
-        return
+        """
+        Handle mouse drag events over the view box.
+
+        Parameters
+        ----------
+        ev : MouseDragEvent
+            The mouse drag event.
+
+        axis : int, optional
+            The axis along which the drag event occurs. Default is None.
+
+        """
+
+        if ev.isStart():
+            self.setCursor(self.cursor.ClosedHandCursor)
+
+        if ev.isFinish():
+            self.setCursor(self.cursor.DefaultCursor)
+
+        super().mouseDragEvent(ev, axis)
 
     def mouseClickEvent(self, ev):
         if ev.button() == Qt.RightButton:
