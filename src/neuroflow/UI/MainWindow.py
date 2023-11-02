@@ -49,6 +49,9 @@ class MainWindow(QMainWindow):
         # Instantiate Toolbar
         self.toolBar = Toolbar(self)
 
+        # Instantiate Settings
+        self.settings = Settings(self)
+
         # Instantiate File System Tab
         self.fileTreeView = FileTreeView(self)
 
@@ -59,7 +62,7 @@ class MainWindow(QMainWindow):
         self.maskGraphicsView = MaskGraphicsView(self, self.toolBar)
 
         # Instantiate Series Graphics
-        self.seriesGraphicsView = SeriesGraphicsView(self, self.toolBar)
+        self.seriesGraphicsView = SeriesGraphicsView(self, self.toolBar, self.settings)
 
         # Instantiate Series Table
         self.seriesTableView = SeriesTableView(self)
@@ -69,8 +72,6 @@ class MainWindow(QMainWindow):
 
         # Instantiate Flow Graphics
         self.flowGraphicsView = FlowGraphicsView(self, self.toolBar)
-
-        self.settings = Settings(self)
 
         self.initUI()
 

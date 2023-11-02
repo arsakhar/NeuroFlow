@@ -6,7 +6,7 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QPen
 from PyQt5.QtWidgets import QGraphicsObject, QMenu, QInputDialog, QLineEdit, QGraphicsLineItem
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon
 
 from ...Helper.SegmentationRegion import SegmentationRegion
 
@@ -26,12 +26,15 @@ class OverlayGraphics(QGraphicsObject):
     toolBar : ToolBar
         The toolbar object for overlay control.
 
+    settings : Settings
+        The settings object.
+
     """
 
     newOverlay = pyqtSignal(object)
     updatedOverlay = pyqtSignal(object)
 
-    def __init__(self, imageView, imageItem, toolBar):
+    def __init__(self, imageView, imageItem, toolBar, settings):
         """
         Initializes the OverlayGraphics object.
 
@@ -46,6 +49,9 @@ class OverlayGraphics(QGraphicsObject):
         toolBar : ToolBar
             The toolbar object for overlay control.
 
+        settings : Settings
+            The settings object.
+
         """
 
         super().__init__()
@@ -53,6 +59,8 @@ class OverlayGraphics(QGraphicsObject):
         self.imageItem = imageItem
 
         self.toolBar = toolBar
+
+        self.settings = settings
 
         self.roiPen = QtGui.QPen()
         self.roiPen.setWidthF(.1)
@@ -409,60 +417,64 @@ class OverlayGraphics(QGraphicsObject):
 
         menu = QMenu()
 
-        setROI = None
-        setBG = None
-        setID = None
+        # setROI = None
+        # setBG = None
+        # setID = None
 
-        if region.id == SegmentationRegion.BACKGROUND:
-            setROI = menu.addAction("Set ROI")
-        else:
-            setBG = menu.addAction("Set Background")
-            setID = menu.addAction("Rename ROI" + " (Current: " + region.id + ")")
+        for label in self.settings.labels:
+            menu.addAction(label)
+
+        # if region.id == SegmentationRegion.BACKGROUND:
+        #     setROI = menu.addAction("Set ROI")
+        # else:
+        #     setBG = menu.addAction("Set Background")
+        #     setID = menu.addAction("Rename ROI" + " (Current: " + region.id + ")")
 
         action = menu.exec_(globalPos)
 
         if action is None:
             return
 
-        if action == setBG:
-            region.id = SegmentationRegion.BACKGROUND
+        # if action == setBG:
+        #     region.id = SegmentationRegion.BACKGROUND
+        #
+        #     for segment in region.segments:
+        #         _pen = QPen(self.bgPen)
+        #         _pen.setColor(segment.pen().color())
+        #         segment.setPen(_pen)
+        #
+        #     self.newOverlay.emit(self.overlay)
+        #
+        # elif action == setROI:
+        #     region.id = SegmentationRegion.DEFAULT
+        #
+        #     for segment in region.segments:
+        #         _pen = QPen(self.roiPen)
+        #         _pen.setColor(segment.pen().color())
+        #         segment.setPen(_pen)
+        #
+        #     self.newOverlay.emit(self.overlay)
+        #
+        # elif action == setID:
+        #     idDialog = InputDialog()
+        #     inputText, okPressed = idDialog.getText(idDialog, "ROI", "Set ROI Name:", QLineEdit.Normal, "")
+        #
+        #     if not okPressed:
+        #         return
+        #
+        #     if not inputText:
+        #         return
+        #
+        #     if inputText == SegmentationRegion.BACKGROUND:
+        #         inputText = SegmentationRegion.BACKGROUND + '(1)'
+        #
+        #     elif inputText == SegmentationRegion.DEFAULT:
+        #         inputText = SegmentationRegion.DEFAULT + '(1)'
+        #
+        #     region.id = inputText
 
-            for segment in region.segments:
-                _pen = QPen(self.bgPen)
-                _pen.setColor(segment.pen().color())
-                segment.setPen(_pen)
-
-            self.newOverlay.emit(self.overlay)
-
-        elif action == setROI:
-            region.id = SegmentationRegion.DEFAULT
-
-            for segment in region.segments:
-                _pen = QPen(self.roiPen)
-                _pen.setColor(segment.pen().color())
-                segment.setPen(_pen)
-
-            self.newOverlay.emit(self.overlay)
-
-        elif action == setID:
-            idDialog = InputDialog()
-            inputText, okPressed = idDialog.getText(idDialog, "ROI", "Set ROI Name:", QLineEdit.Normal, "")
-
-            if not okPressed:
-                return
-
-            if not inputText:
-                return
-
-            if inputText == SegmentationRegion.BACKGROUND:
-                inputText = SegmentationRegion.BACKGROUND + '(1)'
-
-            elif inputText == SegmentationRegion.DEFAULT:
-                inputText = SegmentationRegion.DEFAULT + '(1)'
-
-            region.id = inputText
-
-            self.newOverlay.emit(self.overlay)
+        region.id = action.text()
+        self.newOverlay.emit(self.overlay)
 
 
 class Overlay:

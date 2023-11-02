@@ -9,6 +9,10 @@ from ..Helper.Resources import appSettings
 class Settings(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
+
+        self.save_dir = ""
+        self.labels = []
+
         self.initUI()
 
     def initUI(self):
@@ -98,6 +102,7 @@ class Settings(QWidget):
             return
 
         self.saveDir.setText(folder_path)
+        self.save_dir = folder_path
         appSettings.setValue("Save Directory", folder_path)
 
     def addLabel(self):
@@ -106,16 +111,16 @@ class Settings(QWidget):
 
     def loadSettings(self):
         # Load selected directory from settings
-        saved_directory = appSettings.value("Save Directory", "")
-        if saved_directory and QDir(saved_directory).exists():
-            self.saveDir.setText(saved_directory)
+        self.save_dir = appSettings.value("Save Directory", "")
+        if self.save_dir and QDir(self.save_dir).exists():
+            self.saveDir.setText(self.save_dir)
 
         # Load labels from settings
-        saved_labels = appSettings.value("Labels", [])
-        if not saved_labels:
+        self.labels = appSettings.value("Labels", [])
+        if not self.labels:
             return
 
-        for label in saved_labels:
+        for label in self.labels:
             self.addLabelToTable(label)
 
     def addLabelToTable(self, label):
@@ -128,6 +133,7 @@ class Settings(QWidget):
         labels = [self.labelTable.item(row, 0).text() for row in range(self.labelTable.rowCount())
                   if self.labelTable.item(row, 0) is not None
                   ]
+        self.labels = labels
         appSettings.setValue("Labels", labels)
 
 

@@ -11,6 +11,7 @@ class UIController:
         self.ui_toolBar = self.ui_main.toolBar
         self.ui_sideMenu = self.ui_main.sideMenu
         self.ui_statusBar = self.ui_main.statusBar
+        self.ui_settings = self.ui_main.settings
 
         self.ui_fileTreeView = self.ui_main.fileTreeView
         self.ui_maskGraphicsView = self.ui_main.maskGraphicsView
@@ -32,7 +33,8 @@ class UIController:
                                      self.ui_seriesGraphicsView,
                                      self.ui_maskGraphicsView,
                                      self.ui_toolBar,
-                                     self.ui_fileTreeView)
+                                     self.ui_fileTreeView
+                                     )
 
         self.setPatientLoadedCallbacks()
         self.setSeriesSelectedCallbacks()
@@ -63,8 +65,6 @@ class UIController:
     def linkSeriesMaskViews(self):
         self.ui_maskGraphicsView.view.setXLink(self.ui_seriesGraphicsView.view)
         self.ui_maskGraphicsView.view.setYLink(self.ui_seriesGraphicsView.view)
-        # self.ui_seriesGraphicsView.view.setXLink(self.ui_maskGraphicsView.view)
-        # self.ui_seriesGraphicsView.view.setYLink(self.ui_maskGraphicsView.view)
         self.overlay.newOverlay.connect(self.ui_maskGraphicsView.newOverlay)
         self.autoSeg.newAutoSeg.connect(self.ui_maskGraphicsView.newAutoSeg)
         self.ui_maskGraphicsView.newMask.connect(self.overlay.newMask)

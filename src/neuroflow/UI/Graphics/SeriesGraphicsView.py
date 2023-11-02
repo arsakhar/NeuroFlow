@@ -39,7 +39,7 @@ class SeriesGraphicsView(PGImageView):
 
     newSegmentationBundle = pyqtSignal(object)
 
-    def __init__(self, parent, toolBar):
+    def __init__(self, parent, toolBar, settings):
         """
         Initializes the SeriesGraphicsView object.
 
@@ -50,6 +50,9 @@ class SeriesGraphicsView(PGImageView):
 
         toolBar : ToolBar
             The toolbar object associated with the graphics view.
+
+        settings : Settings
+            The settings object.
 
         """
 
@@ -62,7 +65,9 @@ class SeriesGraphicsView(PGImageView):
 
         self.cursor = Cursor()
 
-        self.overlay = OverlayGraphics(self.view, self.imageItem, self.toolBar)
+        self.settings = settings
+
+        self.overlay = OverlayGraphics(self.view, self.imageItem, self.toolBar, self.settings)
         self.autoSeg = AutoSegmentation(self, self.toolBar)
         self.imageStats = ImageStats(self)
 
